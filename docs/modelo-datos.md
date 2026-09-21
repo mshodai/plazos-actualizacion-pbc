@@ -1,6 +1,6 @@
 # Modelo de datos de entrada
 
-Este documento define el JSON que recibe el cálculo de la **fecha de la próxima revisión obligatoria de la información de un cliente** en una fecha dada. Solo describe la entrada: el cálculo y su salida se definirán más adelante, en otro documento.
+Este documento define el JSON que recibe el cálculo de la **fecha de la próxima revisión obligatoria de la información de un cliente** en una fecha dada. Solo describe la entrada. Cómo se calcula y qué devuelve el cálculo está en [`especificacion-calculo.md`](especificacion-calculo.md).
 
 Siglas y fuentes (detalle y huellas en [`fuentes/FUENTES.md`](fuentes/FUENTES.md)):
 
@@ -395,9 +395,24 @@ Todos los datos se validan igual con independencia del régimen (§0, principio 
 
 ## 9. Validación
 
-La validación no depende del régimen (§0, principio 3). Se recogen todos los errores de la entrada, no solo el primero, y si hay alguno la entrada se rechaza entera. Los códigos de error se fijarán con la implementación.
+La validación no depende del régimen (§0, principio 3). Se recogen todos los errores de la entrada, no solo el primero, y si hay alguno la entrada se rechaza entera.
 
-Todas estas reglas son **[Decisión propia]**.
+### 9.1. Errores
+
+| Código | Error | Reglas |
+|---|---|---|
+| `ERR-01` | Estructura o tipo: el JSON está mal formado o repite una clave en un mismo objeto; falta un campo obligatorio; un valor no es del tipo indicado; `version_modelo` no es `1`; hay un campo `regimen` o cualquier otro campo que el modelo no define. | §2, V-1 a V-3, V-15 a V-18 |
+| `ERR-02` | `id` repetido en su lista (versiones del manual, revisiones, eventos), `vigente_desde` repetida, `fecha` de clasificación repetida, o un evento citado dos veces en la misma revisión. | V-4, V-20 |
+| `ERR-03` | `nivel_entidad` repetido en las periodicidades de una versión del manual. | V-5 |
+| `ERR-04` | `cliente.clasificaciones` vacía. | V-7 |
+| `ERR-05` | Una revisión cita en `eventos` un `id` que no existe en `cliente.eventos`. | V-8 |
+| `ERR-06` | `fecha_conocimiento` anterior a `fecha_hecho`. | V-9 |
+| `ERR-07` | `fecha_terminacion_relacion` anterior a `fecha_inicio_relacion`. | V-10 |
+| `ERR-08` | Un hecho posterior a `fecha_referencia`. Un error por cada fecha. | V-11 |
+
+### 9.2. Decisiones de validación
+
+Todas son **[Decisión propia]**. V-1 a V-13 salieron del diseño del modelo; V-14 a V-23, de la implementación de la carga, para lo que el modelo no decidía. Cada una cambia el resultado de la validación: si una entrada se acepta o se rechaza, o con qué código.
 
 | Id | Regla | Motivo |
 |---|---|---|
@@ -414,6 +429,16 @@ Todas estas reglas son **[Decisión propia]**.
 | V-11 | Un hecho posterior a `fecha_referencia` es un error (§7), salvo `anio_natural`. | — |
 | V-12 | No se comprueba que las revisiones sean posteriores a `fecha_inicio_relacion`, ni que los eventos que atiende una revisión sean anteriores a ella. | La diligencia debida inicial puede preceder al día de establecimiento de la relación, y una revisión puede atender un evento conocido después si se registra así. El cálculo no depende de ese orden. |
 | V-13 | Se admiten todas las combinaciones de `superior_al_promedio`, `riesgo_elevado_amlr` y `medidas_seccion_4_amlr`. | Son hechos (§4.2). |
+| V-14 | Códigos `ERR-01` a `ERR-08` (§9.1), en el orden de las reglas V-n de las que salen. Son estables y no se reutilizan. | Mismo criterio que en `plazos-conservacion-pbc`: números cortos y estables. |
+| V-15 | Son `ERR-01` un JSON mal formado, una clave repetida en un mismo objeto y los valores `NaN`, `Infinity` y `-Infinity`. | Son errores de estructura. Una clave repetida suele ser un error de edición, y quedarse con el último valor, como hace un lector JSON habitual, lo taparía. `NaN` e `Infinity` no son JSON válido aunque muchos lectores los acepten. |
+| V-16 | Las fechas deben tener exactamente la forma `AAAA-MM-DD` y ser una fecha que exista. | La norma ISO 8601 admite otras formas (`20270710`, semanas) que el modelo no pide (§2). |
+| V-17 | Los enteros (`version_modelo`, `meses`, `plazo_revision_por_evento_dias`, `anio_natural`) no admiten booleanos ni números con decimales, tampoco `12.0`. `meses` y `plazo_revision_por_evento_dias` deben ser mayores que 0; `anio_natural`, entre 1 y 9999. Si no, `ERR-01`. | Un plazo de cero meses o negativo no es una periodicidad, y un año fuera de ese intervalo no se puede convertir en fecha. |
+| V-18 | Se admiten textos vacíos, también en `id` y `nivel_entidad`. En los eventos de tipo `otro`, `descripcion` es obligatoria y no admite `null`, pero puede estar vacía. En los demás tipos, `descripcion` a `null` equivale a omitirla. | Ningún texto interviene en el cálculo salvo como identificador. Exigir contenido en `descripcion` obligaría a decidir qué texto es suficiente. |
+| V-19 | `manual.versiones` y `periodicidades` pueden estar vacías. | Un manual sin periodicidades es un hecho posible, y la especificación dice qué pasa entonces (D-13, D-14, D-16). |
+| V-20 | Un mismo `id` no puede aparecer dos veces en `eventos` de la misma revisión (`ERR-02`). Sí puede aparecer en varias revisiones. | Dos veces en la misma revisión es un error de edición. Un evento puede revisarse más de una vez, por ejemplo tras una revisión `no_completada`. |
+| V-21 | `nivel_entidad` se compara de forma exacta, sin normalizar mayúsculas ni espacios. | Normalizar sería decidir que `"Alto"` y `"alto"` son el mismo nivel de la escala de la entidad. |
+| V-22 | No se comprueba que `anio_natural` sea el año de `fecha_hecho` o uno posterior, ni que las revisiones o los eventos sean anteriores a la terminación de la relación. | La obligación puede nacer un año para cumplirse otro, y el cálculo no depende de ese orden (especificación, D-22). |
+| V-23 | Un dato presente pero mal formado solo da `ERR-01`: las comprobaciones que dependen de él no se hacen. Si la lista de eventos o el `id` de algún evento están mal formados, no se comprueba `ERR-05`. | Un error derivado desaparece al corregir el primero y oculta cuál es el dato que falla. Es la regla V-17 de `plazos-conservacion-pbc`. |
 
 ---
 

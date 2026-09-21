@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "plazos-actualizacion-pbc"
+version = "0.1.0"
+description = "Calcula la próxima revisión obligatoria de la información de un cliente de prevención del blanqueo de capitales según el RD 304/2014 y el AMLR"
+license = "MIT"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
