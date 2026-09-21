@@ -76,7 +76,31 @@ Ninguna fuente dice cómo se cuentan los meses ni los días. Se usan estas regla
 
 **[D-6]** Si todas las combinaciones de lecturas dan el mismo estado en R, `estado` toma ese valor, aunque las fechas sean distintas. Si difieren, `estado` es `indeterminado`. Las lecturas se devuelven siempre.
 
-**[D-30]** Cada `indeterminado` se atribuye a las lecturas que lo causan. Una dimensión de lectura causa el `indeterminado` si hay dos combinaciones que solo se diferencian en esa dimensión y dan estados distintos. El resultado lista esas dimensiones, con el estado que da cada una de sus lecturas. También lista los datos de la entrada que las ponen en juego, citados por su identificador (el `id` de una revisión, de un evento o de una versión del manual, o la `fecha` de una clasificación) y su ruta en el JSON. Por ejemplo, en el ejemplo 4 el `indeterminado` se atribuye a RA (RA-1 `en_plazo`, RA-2 `vencida`) y a la revisión `por_evento` que lo provoca. La alternativa, atribuirlo a todas las dimensiones que tienen más de una lectura, señalaría también las que no cambian el resultado.
+**[D-30]** Cada `indeterminado` se atribuye a las dimensiones de lectura que lo causan. **Una dimensión causa el `indeterminado` si existe alguna combinación de las demás dimensiones en la que cambiar solo esa cambia el estado.** No hay combinación de referencia con la que comparar, porque la herramienta no elige lecturas: cualquier combinación de las demás sirve para atribuir. Así se atribuyen también las dimensiones que solo cambian el estado junto con otra.
+
+Para cada dimensión atribuida, el resultado da:
+- los estados que da cada una de sus lecturas;
+- los datos de la entrada que la ponen en juego, citados por su identificador (el `id` de una revisión, de un evento o de una versión del manual, o la `fecha` de una clasificación) y su ruta en el JSON.
+
+Por ejemplo, en el ejemplo 4 con `ley_rd`, el `indeterminado` se atribuye a RA (RA-1 `en_plazo`, RA-2 `vencida`) y a las revisiones no periódicas cuya cuenta decide RA: la inicial y la `por_evento`.
+
+**Dos dimensiones que solo cambian el estado juntas.** En el ejemplo 6, IP solo importa cuando RA no deja que la revisión inicial marque el calendario:
+
+| | IP-1 (2027-10-01) | IP-2 (2027-11-25) | IP-3 (2027-09-20) |
+|---|---|---|---|
+| RA-1 | `en_plazo` | `en_plazo` | `en_plazo` |
+| RA-2 | `vencida` | `en_plazo` | `vencida` |
+
+- Con RA-1 como referencia, cambiar IP no cambiaría nada, e IP no se atribuiría. Pero con RA-2, pasar de IP-2 a IP-1 cambia el estado: IP se atribuye.
+- Con IP-2 como referencia, cambiar RA no cambiaría nada. Pero con IP-1, pasar de RA-1 a RA-2 cambia el estado: RA se atribuye.
+
+El `indeterminado` se atribuye a las dos. Cualquier combinación de referencia habría dejado fuera una de ellas, y la salida no diría que el resultado depende también de esa pregunta.
+
+Las alternativas descartadas:
+- atribuir a todas las dimensiones que tienen más de una lectura señalaría también las que no cambian el resultado;
+- comparar solo con una combinación de referencia dejaría fuera las dimensiones que cambian el estado junto con otra, como IP en el ejemplo 6.
+
+**Consecuencia.** Todo `indeterminado` tiene al menos una dimensión atribuida. Si dos combinaciones dan estados distintos, se puede pasar de una a otra cambiando una dimensión cada vez, y en algún paso cambia el estado. La dimensión de ese paso cumple la definición.
 
 **[D-7]** Las lecturas de dimensiones distintas se combinan todas con todas. Solo se devuelven las combinaciones que dan un resultado distinto. En los eventos, una lectura se aplica por **tipo** de evento: todos los eventos del mismo tipo se leen igual dentro de una combinación. La alternativa, leer cada evento por separado, produciría combinaciones incoherentes. Por ejemplo, dos operaciones significativas tratadas una como letra a) y otra como letra c) del art. 26.3.
 
@@ -645,4 +669,4 @@ Lleva la misma advertencia que en `plazos-conservacion-pbc`: es un cálculo bajo
 | D-27 | T-1 y T-3 pasan al AMLR desde la primera revisión que cuenta con fecha ≥ A. | §5.2 |
 | D-28 | La salida señala si T-1 a T-4 no coinciden y si `ley_rd` y `amlr` no coinciden. | §5.2 |
 | D-29 | La próxima revisión obligatoria es la fecha límite sin cumplir más temprana; los eventos sin plazo van aparte. | §1.4 |
-| D-30 | Cada `indeterminado` se atribuye a las dimensiones de lectura que, cambiando solo ellas, cambian el estado, y a los datos que las ponen en juego. | §1.5 |
+| D-30 | Una dimensión causa el `indeterminado` si, en alguna combinación de las demás, cambiar solo esa cambia el estado; sin combinación de referencia. Se dan sus lecturas con sus estados y los datos que la ponen en juego. | §1.5 |
