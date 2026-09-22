@@ -727,7 +727,9 @@ Con una entrada no válida también se emite el informe, que lista los errores c
 - Un `indeterminado` da 1 cuando alguna de sus lecturas exige actuar, que con estos estados es siempre: `relacion_terminada` no depende de ninguna lectura, así que un `indeterminado` mezcla siempre `en_plazo` con un estado que exige actuar.
 - Seis regímenes en `en_plazo` con fechas distintas dan 0.
 
-La discrepancia entre regímenes, en el estado o en las fechas, no cambia el código: sigue en el informe ([D-28], [D-40]). El código responde a si hay que hacer algo con el cliente con alguna norma y alguna lectura. Es el mismo criterio que `registro-examen-especial-pbc` (D-25), aplicado a estos estados. El informe en JSON lo da en `exige_actuar`.
+La discrepancia entre regímenes, en el estado o en las fechas, no cambia el código: sigue en el informe ([D-28], [D-40]). El código responde a si hay que hacer algo con el cliente con alguna norma y alguna lectura. Es el mismo criterio que `plazos-conservacion-pbc` (D-28) y `registro-examen-especial-pbc` (D-25), aplicado a estos estados.
+
+**El informe dice qué lo activa.** `exige_actuar` no es solo verdadero o falso: da el régimen, la combinación de lecturas y el estado de cada combinación que exige actuar, para que un código 1 junto a un `indeterminado`, o junto a cualquier estado que no exija nada, se explique en el propio informe. En JSON: `exige_actuar = {"valor": …, "activado_por": [{"regimen", "lecturas", "estado"}, …]}`, con `lecturas` vacía si el régimen no tiene ninguna dimensión que decidir. En texto, un apartado «Exige actuar» da esas combinaciones por régimen, hasta tres por régimen (el JSON las da todas, como en [D-39]), y señala «estado del régimen: …» cuando el estado mostrado no es uno de los que exigen actuar.
 
 **[D-38, retirada]** Era: el código solo mira si los estados coinciden; estados distintos o un `indeterminado` dan 1, y seis regímenes con el mismo estado dan 0. Sustituida por [D-41]: con D-38, un cliente vencido en los seis regímenes daba 0, como uno en plazo.
 
@@ -777,4 +779,4 @@ La discrepancia entre regímenes, en el estado o en las fechas, no cambia el có
 | D-38 | *Retirada.* Era: el código de salida solo mira si los estados coinciden: `indeterminado` o estados distintos dan 1; el mismo estado en los seis da 0. Sustituida por D-41. | §10.3 |
 | D-39 | En texto, más de tres fechas posibles se resumen como intervalo; el JSON las da todas. | §10.1 |
 | D-40 | Dos regímenes coinciden si dan el mismo estado y las mismas fechas. | §10.1 |
-| D-41 | El código 1 señala que alguna lectura exige actuar (`vencida`, `revision_pendiente_sin_plazo` o `sin_plazo`); el 0, que ninguna lo exige, aunque los regímenes discrepen. | §10.3 |
+| D-41 | El código 1 señala que alguna lectura exige actuar (`vencida`, `revision_pendiente_sin_plazo` o `sin_plazo`); el 0, que ninguna lo exige, aunque los regímenes discrepen. `exige_actuar` da el régimen y las lecturas que lo activan. Mismo criterio que D-28 de `plazos-conservacion-pbc` y D-25 de `registro-examen-especial-pbc`. | §10.3 |

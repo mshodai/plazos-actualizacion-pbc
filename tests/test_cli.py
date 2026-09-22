@@ -105,11 +105,26 @@ def test_codigo_1_con_indeterminado_aunque_coincidan(fichero, capsys):
     assert "Qué hay que decidir" in capsys.readouterr().out
 
 
+def test_exige_actuar_dice_que_lectura_lo_activa(fichero, capsys):
+    # Ejemplo 1 en 2024, antes de A: ley_rd vencida (sin lecturas que decidir); amlr indeterminado,
+    # vencida solo con PM-2. El informe explica el código 1 con el régimen y la lectura.
+    datos = _datos("2024-06-01", CLASIFICACION, INICIAL)
+    assert main([fichero(datos), "--json"]) == 1
+    activado_por = json.loads(capsys.readouterr().out)["exige_actuar"]["activado_por"]
+    assert {"regimen": "ley_rd", "lecturas": [], "estado": "vencida"} in activado_por
+    assert {"regimen": "amlr", "lecturas": ["PM-2"], "estado": "vencida"} in activado_por
+    assert {"regimen": "amlr", "lecturas": ["PM-1"], "estado": "en_plazo"} not in activado_por
+    assert main([fichero(datos)]) == 1
+    salida = capsys.readouterr().out
+    assert "PM-2: vencida (estado del régimen: indeterminado)" in salida
+    assert "sin lecturas que decidir: vencida" in salida
+
+
 def test_json(fichero, capsys):
     assert main([fichero(_datos("2022-06-01", CLASIFICACION, INICIAL)), "--json"]) == 0
     datos = json.loads(capsys.readouterr().out)
     assert datos["valida"] is True
-    assert datos["exige_actuar"] is False
+    assert datos["exige_actuar"] == {"valor": False, "activado_por": []}
     assert set(datos["regimenes"]) == {"ley_rd", "amlr", "T-1", "T-2", "T-3", "T-4"}
 
 

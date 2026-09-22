@@ -165,6 +165,18 @@ ESTADOS_QUE_EXIGEN_ACTUAR = frozenset({VENCIDA, PENDIENTE_SIN_PLAZO, SIN_PLAZO})
 
 
 @dataclass(frozen=True)
+class Activador:
+    """D-41: una combinación de lecturas de un régimen que da un estado que exige actuar.
+
+    `lecturas` está vacía si el régimen no tiene ninguna dimensión que decida.
+    """
+
+    regimen: str
+    lecturas: tuple[str, ...]
+    estado: str
+
+
+@dataclass(frozen=True)
 class RespuestaLectura:
     """Qué pasa si se responde con esta lectura (D-36).
 
@@ -260,13 +272,19 @@ class Informe:
         return INDETERMINADO in self.estados.values()
 
     @property
-    def exige_actuar(self) -> bool:
-        """D-41: alguna lectura de algún régimen da un estado que exige actuar."""
-        return any(
-            lectura.estado in ESTADOS_QUE_EXIGEN_ACTUAR
+    def activadores(self) -> tuple[Activador, ...]:
+        """D-41: cada régimen y combinación de lecturas que da un estado que exige actuar."""
+        return tuple(
+            Activador(r.regimen, tuple(valor for _, valor in lectura.lecturas), lectura.estado)
             for r in self.regimenes
             for lectura in r.resultado.lecturas
+            if lectura.estado in ESTADOS_QUE_EXIGEN_ACTUAR
         )
+
+    @property
+    def exige_actuar(self) -> bool:
+        """D-41: alguna lectura de algún régimen da un estado que exige actuar."""
+        return bool(self.activadores)
 
     @property
     def grupos(self) -> dict[str, tuple[str, ...]]:
@@ -339,6 +357,31 @@ def _distintos(hojas, extraer) -> tuple[Componente, ...]:
 
 
 # --- JSON -------------------------------------------------------------------------
+
+
+MAX_ACTIVADORES_TEXTO = 3
+
+
+def _exige_actuar_texto(inf) -> list[str]:
+    """D-41: qué régimen y qué lecturas exigen actuar, para que el código 1 se explique en el informe.
+
+    En texto, más de tres combinaciones por régimen se resumen; el JSON las da todas.
+    """
+    if not inf.exige_actuar:
+        return ["  No: ninguna lectura de ningún régimen exige actuar (D-41)."]
+    lineas = ["  Sí (D-41). Lo exigen:"]
+    por_regimen: dict[str, list[str]] = {}
+    for a in inf.activadores:
+        lecturas = " y ".join(a.lecturas) if a.lecturas else "sin lecturas que decidir"
+        por_regimen.setdefault(a.regimen, []).append(f"{lecturas}: {a.estado}")
+    for regimen, combinaciones in por_regimen.items():
+        mostradas = combinaciones[:MAX_ACTIVADORES_TEXTO]
+        resto = len(combinaciones) - len(mostradas)
+        texto_resto = f"; y {resto} combinaciones más (todas en --json)" if resto else ""
+        estado = inf[regimen].estado
+        nota = "" if estado in ESTADOS_QUE_EXIGEN_ACTUAR else f" (estado del régimen: {estado})"
+        lineas.append(f"    {regimen:<{ANCHO_REGIMEN}}  {'; '.join(mostradas)}{texto_resto}{nota}")
+    return lineas
 
 
 def _fecha(valor):
@@ -425,7 +468,12 @@ def como_dict(inf: Informe) -> dict:
         "regimenes": {},
     }
     if inf.valida:
-        datos["exige_actuar"] = inf.exige_actuar
+        datos["exige_actuar"] = {
+            "valor": inf.exige_actuar,
+            "activado_por": [
+                {"regimen": a.regimen, "lecturas": list(a.lecturas), "estado": a.estado} for a in inf.activadores
+            ],
+        }
         datos["comparacion"] = {
             "estados_distintos": inf.estados_distintos,
             "fechas_distintas": inf.fechas_distintas,
@@ -540,6 +588,9 @@ def texto(inf: Informe) -> str:
             lineas.append(f"  Mismo estado en los seis ({inf[LEY_RD].estado}), con fechas distintas.")
     if inf.hay_indeterminado:
         lineas.append("  «indeterminado»: las lecturas de ese régimen dan estados distintos (D-6).")
+
+    lineas += ["", f"Exige actuar el {ref}:"]
+    lineas += _exige_actuar_texto(inf)
 
     if inf.hay_indeterminado:
         lineas += ["", "Qué hay que decidir para salir del indeterminado (D-30, D-36):"]
