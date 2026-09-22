@@ -15,7 +15,7 @@ Hay dos grupos:
   - En la normativa, es la de la descarga original en `calculo-titularidad-real`, tal como la recoge el `FUENTES.md` de `plazos-conservacion-pbc`. Las copias de este repositorio se crearon el 2026-09-21 al copiarlas.
   - En el borrador de la AMLA, es la fecha de creación del fichero (2026-09-21). Los metadatos de origen de macOS (`kMDItemWhereFroms`) solo guardan `https://www.amla.europa.eu/`, no la URL completa.
 - **URL.**
-  - En la normativa, se copian de `plazos-conservacion-pbc`, donde se explica cómo se obtuvieron y cuáles se comprobaron. Resumen: las del BOE devolvieron allí un fichero idéntico al local; la de EUR-Lex **no se ha podido comprobar**. En este repositorio no se han vuelto a comprobar.
+  - En la normativa, se copian de `plazos-conservacion-pbc`, donde se explica cómo se obtuvieron. Todas se comprobaron por descarga el 22/09/2026: cada una devolvió un fichero idéntico al local (mismo SHA-256), también la de EUR-Lex. EUR-Lex rechaza a veces las descargas automáticas: responde `202` con un cuerpo vacío. Por eso, en la primera comprobación, el 2026-09-15, su URL no se pudo comprobar, y el 22/09/2026 hicieron falta varios intentos.
   - En el borrador de la AMLA, se da la página de la consulta y el enlace de descarga que figura en ella. Se comprobó el 2026-09-21: la página responde `200`, y el PDF descargado con `curl` desde ese enlace tiene el mismo SHA-256 que la copia local.
 
 ## Documentos
