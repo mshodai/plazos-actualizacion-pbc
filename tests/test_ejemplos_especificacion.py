@@ -181,7 +181,7 @@ def test_ejemplo_5a_cambio_de_titularidad():
     assert estados(r)["amlr"] == "vencida"
     assert fechas(r, "amlr") == ["2028-05-01"]
     (h,) = {h.eventos for h in r["amlr"].lecturas}
-    assert [(e.base, e.fecha_activacion, e.fecha_limite) for e in h] == [("AMLR 26.3.a", D("2028-04-01"), D("2028-05-01"))]
+    assert [(e.bases, e.fecha_activacion, e.fecha_limite) for e in h] == [(("AMLR 26.3.a",), D("2028-04-01"), D("2028-05-01"))]
     assert any("letra a)" in a for a in r["amlr"].avisos)
     assert estados(r)["ley_rd"] == "indeterminado"
     assert atribuidas(r, "ley_rd") == ["L72"]

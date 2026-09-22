@@ -110,6 +110,19 @@ def fecha_aplicacion(actividad: str) -> date:
     return APLICACION_AMLR
 
 
+def _mas_temprana(candidatas):
+    """(fecha más temprana, todas las bases con esa fecha), o None si no hay
+    candidatas. `candidatas` es una lista de (fecha, base), en orden (D-21, D-34)."""
+    if not candidatas:
+        return None
+    primera = min(f for f, _ in candidatas)
+    bases = []
+    for f, b in candidatas:
+        if f == primera and b not in bases:
+            bases.append(b)
+    return primera, tuple(bases)
+
+
 # --- Resultado -------------------------------------------------------------------
 
 
@@ -126,10 +139,14 @@ class Periodico:
 
 @dataclass(frozen=True)
 class EventoPendiente:
-    """Evento que activa una revisión y no está atendido (§6)."""
+    """Evento que activa una revisión y no está atendido (§6).
+
+    `bases`: todos los supuestos que lo activan en `fecha_activacion`, en el orden
+    RD 33.1.b, Ley 7.2, AMLR. Si varios empatan, se informan todos (D-34).
+    """
 
     id: str
-    base: str
+    bases: tuple[str, ...]
     fecha_activacion: date
     fecha_limite: date | None
     estado: str
@@ -146,9 +163,15 @@ class Lectura:
     lecturas: tuple[tuple[str, str], ...]
     estado: str
     fecha_proxima_revision: date | None
-    periodico: Periodico | None
+    periodicos: tuple[Periodico, ...]
     eventos: tuple[EventoPendiente, ...]
     avisos: tuple[str, ...]
+
+    @property
+    def periodico(self) -> Periodico | None:
+        """El componente periódico si solo hay uno. Con un empate entre normas
+        (D-34) hay varios, en `periodicos`, y esto es None."""
+        return self.periodicos[0] if len(self.periodicos) == 1 else None
 
 
 @dataclass(frozen=True)
@@ -293,7 +316,7 @@ def _explorar(funcion, datos):
                 tuple(eleccion.consultadas.items()),
                 resultado.estado,
                 resultado.fecha_proxima_revision,
-                resultado.periodico,
+                resultado.periodicos,
                 resultado.eventos,
                 resultado.avisos,
             )
@@ -347,7 +370,7 @@ def _atribuir(hojas, datos):
 class _Resultado:
     estado: str
     fecha_proxima_revision: date | None
-    periodico: Periodico | None
+    periodicos: tuple[Periodico, ...]
     eventos: tuple[EventoPendiente, ...]
     avisos: tuple[str, ...]
 
@@ -471,21 +494,27 @@ class _Evaluador:
         return resultado, nuevos
 
     @staticmethod
-    def _mas_temprano(a: Periodico, b: Periodico) -> Periodico:
-        if a.fecha_limite is None:
-            return b
-        if b.fecha_limite is None:
-            return a
-        return a if a.fecha_limite <= b.fecha_limite else b
+    def _mas_temprano(*componentes) -> tuple[Periodico, ...]:
+        """Los componentes con la fecha límite más temprana. Si empatan, todos (D-34).
+        Sin fecha límite (D-16) solo rige si ninguno la tiene."""
+        planos = [p for c in componentes for p in (c if isinstance(c, tuple) else (c,))]
+        con_fecha = [p for p in planos if p.fecha_limite is not None]
+        if not con_fecha:
+            return tuple(planos)
+        primera = min(p.fecha_limite for p in con_fecha)
+        return tuple(p for p in con_fecha if p.fecha_limite == primera)
 
-    def _componer(self, periodico, eventos) -> _Resultado:
-        estados = [periodico.estado] + [ev.estado for ev in eventos]
+    def _componer(self, periodicos, eventos) -> _Resultado:
+        if isinstance(periodicos, Periodico):
+            periodicos = (periodicos,)
+        # Si empatan, todos tienen la misma fecha límite y el mismo estado.
+        estados = [periodicos[0].estado] + [ev.estado for ev in eventos]
         estado = next(e for e in _PRIORIDAD if e in estados)  # D-23
-        limites = [periodico.fecha_limite] + [ev.fecha_limite for ev in eventos]
+        limites = [periodicos[0].fecha_limite] + [ev.fecha_limite for ev in eventos]
         limites = [f for f in limites if f is not None]
         # D-29: la más temprana sin cumplir.
         fecha = min(limites) if limites else None
-        return _Resultado(estado, fecha, periodico, tuple(eventos), tuple(self.avisos))
+        return _Resultado(estado, fecha, tuple(periodicos), tuple(eventos), tuple(self.avisos))
 
     def _estado(self, fecha_limite):
         if fecha_limite is None:
@@ -697,7 +726,7 @@ class _Evaluador:
                 aplica = self.e.elegir(f"LC ({ev.tipo})", {"LC-1": False, "LC-2": True}, dato)
             if aplica:
                 candidatas.append((ev.fecha_hecho, "Ley 7.2"))
-        return min(candidatas) if candidatas else None  # D-21
+        return _mas_temprana(candidatas)  # D-21, D-34
 
     def _activacion_amlr(self, ev):
         """(fecha, base) con el AMLR (§6.3), o None."""
@@ -706,7 +735,7 @@ class _Evaluador:
             if letra is None:
                 return None
             fecha = ev.fecha_conocimiento if letra == "c" else ev.fecha_hecho
-            return fecha, f"AMLR 26.3.{letra}"
+            return fecha, (f"AMLR 26.3.{letra}",)
 
         letra = _LETRA_AMLR[ev.tipo]
         if isinstance(letra, str):
@@ -722,7 +751,7 @@ class _Evaluador:
         if modo == "ambas":
             # D-25, T-4: con las dos normas; rige la activación más temprana (D-21).
             activaciones = [a for a in (self._activacion_rd(ev), self._activacion_amlr(ev)) if a]
-            return min(activaciones) if activaciones else None
+            return _mas_temprana([(f, b) for f, bases in activaciones for b in bases])
         # D-25, T-1 a T-3: la norma aplicable en la fecha de activación: el RD si lo
         # activa antes de A, el AMLR si lo activa en A o después. El RD no puede
         # activarlo antes de A si el hecho y su conocimiento son posteriores.
@@ -754,7 +783,7 @@ class _Evaluador:
         )
         opciones = {
             "TE-1": rd,
-            "TE-2": (self.A, f"{amlr[1]}, desde A") if amlr else None,
+            "TE-2": (self.A, tuple(f"{b}, desde A" for b in amlr[1])) if amlr else None,
             "TE-3": None,
         }
         return self.e.elegir("TE", opciones, [self._dato_evento(ev)])
@@ -769,11 +798,11 @@ class _Evaluador:
             activacion = self._activacion(ev, modo)
             if activacion is None or activacion[0] > self.ref:
                 continue
-            fecha, base = activacion
-            pendientes.append(self._pendiente(ev, fecha, base))
+            fecha, bases = activacion
+            pendientes.append(self._pendiente(ev, fecha, bases))
         return pendientes
 
-    def _pendiente(self, ev, activacion, base):
+    def _pendiente(self, ev, activacion, bases):
         """D-20."""
         version = self._version_en(activacion)
         plazo = version.plazo_revision_por_evento_dias if version else None
@@ -785,9 +814,9 @@ class _Evaluador:
             estado = PENDIENTE_SIN_PLAZO
         else:
             estado = self._estado(limite)
-        if base == "AMLR 26.3.a" and limite is not None and limite < ev.fecha_conocimiento:
+        if "AMLR 26.3.a" in bases and limite is not None and limite < ev.fecha_conocimiento:
             self._aviso(
                 f"El evento {ev.id} se activa por la letra a) el {activacion} y la entidad lo conoció el "
                 f"{ev.fecha_conocimiento}, después de su fecha límite ({limite}) (§6.3)."
             )
-        return EventoPendiente(ev.id, base, activacion, limite, estado)
+        return EventoPendiente(ev.id, bases, activacion, limite, estado)

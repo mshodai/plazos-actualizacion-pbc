@@ -64,13 +64,19 @@ Ninguna fuente dice cómo se cuentan los meses ni los días. Se usan estas regla
 
 **[D-29]** La **fecha de la próxima revisión obligatoria** de una lectura es la más temprana de sus fechas límite sin cumplir: la periódica y las de los eventos pendientes que tienen plazo. Si esa fecha es anterior a R, la revisión está vencida. Los eventos pendientes sin plazo no tienen fecha límite: se dan aparte, con la fecha desde la que la revisión es exigible.
 
+**[D-34] Los empates se informan todos.** Cuando dos componentes o dos supuestos dan la misma fecha, el resultado los da todos, en lugar de elegir uno por el orden en que se comprueban:
+- **Componente periódico.** En T-3 y T-4 rige la fecha más temprana entre el RD y el AMLR ([D-26] y §5.2). Si las dos coinciden, el resultado da los dos componentes, cada uno con su norma, su ancla y sus meses.
+- **Bases de un evento.** Rige la activación más temprana ([D-21]). Si varios supuestos activan el evento el mismo día, el evento lleva todos: el RD 33.1.b y la Ley 7.2 con la Ley y el RD; también la letra del AMLR con T-4 ([D-25]). Se dan en el orden RD 33.1.b, Ley 7.2, AMLR, y ese orden no decide nada.
+
+La fecha, el estado y las lecturas no cambian: los componentes que empatan tienen la misma fecha límite, y los supuestos que empatan tienen la misma activación, así que el plazo del manual es el mismo. Solo cambia lo que se informa. La versión anterior del cálculo daba un solo componente o una sola base. En el periódico se quedaba con el RD, por comprobarse primero. En los eventos, la elección dependía del orden alfabético del nombre del supuesto.
+
 ### 1.5. Forma del resultado y lecturas
 
 **[D-5]** El resultado tiene una entrada por régimen. Cada entrada incluye:
 
 - `estado`: uno de los de §1.4.
 - `fecha_proxima_revision`: la de [D-29] si todas las lecturas coinciden, o la lista de fechas distintas con las lecturas que dan cada una.
-- `componentes`: el periódico y los eventos, con sus fechas y su estado.
+- `componentes`: el periódico y los eventos, con sus fechas y su estado. Si hay empates, todos los componentes y todas las bases que empatan ([D-34]).
 - `lecturas`: una entrada por combinación de lecturas que da un resultado distinto. Cada una lleva sus identificadores, sus fechas, su estado y las citas en que se basa.
 - `avisos`: incidencias que no impiden el cálculo, como una periodicidad del manual recortada al límite legal o el AMLR calculado antes de A.
 
@@ -377,7 +383,7 @@ Un evento activa una revisión en un régimen y una lectura si se cumplen las tr
 
 **[D-19]** Un evento está **atendido** si alguna revisión con resultado `actualizada` o `sin_cambios` lo incluye en `eventos`. Da igual la fecha de esa revisión (modelo, V-12). Una revisión que no lo incluye no lo atiende, aunque sea posterior. La alternativa, que cualquier revisión posterior lo atienda, daría por revisado un cambio que la revisión no examinó, y el modelo tiene el campo `eventos` precisamente para saberlo. Una revisión `no_completada` no atiende nada ([D-8]).
 
-**[D-21]** Si en una lectura varios supuestos activan el mismo evento con fechas distintas, se toma la más temprana. Por ejemplo, un cambio de actividad por el RD 33.1.b y por la Ley 7.2. Cualquiera de los supuestos basta para obligar.
+**[D-21]** Si en una lectura varios supuestos activan el mismo evento con fechas distintas, se toma la más temprana. Por ejemplo, un cambio de actividad por el RD 33.1.b y por la Ley 7.2. Cualquiera de los supuestos basta para obligar. Si varios supuestos dan la fecha más temprana, el evento los lleva todos ([D-34]).
 
 ### 6.2. Ley y RD
 
@@ -714,3 +720,4 @@ Lleva la misma advertencia que en `plazos-conservacion-pbc`: es un cálculo bajo
 | D-31 | En T-1 a T-3, un evento que el RD activa en A o después y el AMLR antes de A (o nunca) no se descarta: lecturas TE-1 (RD), TE-2 (AMLR desde A) y TE-3 (ninguna), con aviso. | §5.2 |
 | D-32 | En T-1 a T-3, un evento que el RD activa antes de A y el AMLR en A o después no se resuelve a favor del RD: lecturas TD-1 (RD) y TD-2 (AMLR), con aviso. | §5.2 |
 | D-33 | En T-1 y T-3, si una revisión posterior a A cierra el periodo del RD lo decide el AMLR (TR-1) o el RD (TR-2); con aviso si difieren. | §5.2 |
+| D-34 | Los empates se informan todos: los componentes periódicos de T-3 y T-4 con la misma fecha límite, y los supuestos que activan un evento el mismo día. | §1.4 |

@@ -270,11 +270,11 @@ def test_evento_que_ninguna_norma_activa_en_su_periodo():
             for h in resultado.lecturas
             if dict(h.lecturas).get("FV") == "FV-2" and dict(h.lecturas).get("L72") == "L72-1"
         }
-        assert [(e.base, e.fecha_activacion, e.fecha_limite, e.estado) for e in te["TE-1"].eventos] == [
-            ("RD 33.1.b", D("2027-08-01"), D("2027-08-31"), "en_plazo")
+        assert [(e.bases, e.fecha_activacion, e.fecha_limite, e.estado) for e in te["TE-1"].eventos] == [
+            (("RD 33.1.b",), D("2027-08-01"), D("2027-08-31"), "en_plazo")
         ]
-        assert [(e.base, e.fecha_activacion, e.fecha_limite, e.estado) for e in te["TE-2"].eventos] == [
-            ("AMLR 26.3.a, desde A", D("2027-07-10"), D("2027-08-09"), "vencida")
+        assert [(e.bases, e.fecha_activacion, e.fecha_limite, e.estado) for e in te["TE-2"].eventos] == [
+            (("AMLR 26.3.a, desde A",), D("2027-07-10"), D("2027-08-09"), "vencida")
         ]
         assert te["TE-3"].eventos == ()
         assert te["TE-3"].estado == "en_plazo"
@@ -309,11 +309,11 @@ def test_evento_que_las_dos_normas_activan_en_su_periodo():
             for h in resultado.lecturas
             if dict(h.lecturas).get("L72") == "L72-2" and dict(h.lecturas).get("LC (informacion_de_riesgo)") == "LC-2"
         }
-        assert [(e.base, e.fecha_activacion, e.fecha_limite, e.estado) for e in td["TD-1"].eventos] == [
-            ("Ley 7.2", D("2027-06-01"), D("2027-07-01"), "vencida")
+        assert [(e.bases, e.fecha_activacion, e.fecha_limite, e.estado) for e in td["TD-1"].eventos] == [
+            (("Ley 7.2",), D("2027-06-01"), D("2027-07-01"), "vencida")
         ]
-        assert [(e.base, e.fecha_activacion, e.fecha_limite, e.estado) for e in td["TD-2"].eventos] == [
-            ("AMLR 26.3.c", D("2027-08-01"), D("2027-08-31"), "en_plazo")
+        assert [(e.bases, e.fecha_activacion, e.fecha_limite, e.estado) for e in td["TD-2"].eventos] == [
+            (("AMLR 26.3.c",), D("2027-08-01"), D("2027-08-31"), "en_plazo")
         ]
         # TD solo se consulta cuando el RD activa el evento.
         assert all("TD" not in dict(h.lecturas) for h in resultado.lecturas if dict(h.lecturas).get("L72") == "L72-1")
@@ -360,3 +360,54 @@ def test_revision_sin_cambios_posterior_a_a_en_t1_y_t3():
     # T-2 y T-4 no tienen periodo del RD que cerrar.
     for t in ("T-2", "T-4"):
         assert all("TR" not in dict(h.lecturas) for h in r[t].lecturas)
+
+
+def test_empate_de_componentes_periodicos_en_t4():
+    # D-34: RD y AMLR vencen el mismo día; se informan los dos.
+    r = calcular(
+        entrada(
+            "2028-06-01",
+            "2028-03-01",
+            [clasificacion("2028-03-01", "alto", True, True, True)],
+            [revision("R1", "inicial", "2028-03-01")],
+            versiones=[version(periodicidades={"alto": 12})],
+        )
+    )
+    (hoja,) = r["T-4"].lecturas
+    assert [(p.norma, p.ancla, p.meses, p.fecha_limite) for p in hoja.periodicos] == [
+        ("RD", D("2028-03-01"), 12, D("2029-03-01")),
+        ("AMLR", D("2028-03-01"), 12, D("2029-03-01")),
+    ]
+    assert hoja.periodico is None
+    assert r["T-4"].fechas_proxima_revision == (D("2029-03-01"),)
+    # Sin empate, un solo componente.
+    (hoja,) = r["ley_rd"].lecturas
+    assert hoja.periodico.norma == "RD"
+
+
+def test_empate_de_bases_de_un_evento():
+    # D-34: el mismo día lo activan el RD 33.1.b (FV-1), la Ley 7.2 (L72-2) y, en T-4,
+    # la letra a) del AMLR. Antes se elegía una por orden alfabético.
+    r = calcular(
+        entrada(
+            "2028-05-20",
+            "2027-10-01",
+            [clasificacion("2027-10-01")],
+            [revision("R1", "inicial", "2027-10-01")],
+            [evento("E", "cambio_actividad", "2028-04-01", "2028-05-10")],
+            versiones=[version("M", "2027-07-10", {"medio": 36}, plazo=30)],
+        )
+    )
+
+    def bases(regimen, **lecturas):
+        (hoja,) = [
+            h for h in r[regimen].lecturas if all(dict(h.lecturas).get(k) == v for k, v in lecturas.items())
+        ][:1]
+        (evento_pendiente,) = hoja.eventos
+        return evento_pendiente.bases, evento_pendiente.fecha_limite
+
+    assert bases("ley_rd", FV="FV-1", L72="L72-1") == (("RD 33.1.b",), D("2028-05-01"))
+    assert bases("ley_rd", FV="FV-1", L72="L72-2") == (("RD 33.1.b", "Ley 7.2"), D("2028-05-01"))
+    assert bases("ley_rd", FV="FV-2", L72="L72-2") == (("Ley 7.2",), D("2028-05-01"))
+    assert bases("T-4", FV="FV-1", L72="L72-2") == (("RD 33.1.b", "Ley 7.2", "AMLR 26.3.a"), D("2028-05-01"))
+    assert bases("T-4", FV="FV-2", L72="L72-1") == (("AMLR 26.3.a",), D("2028-05-01"))
