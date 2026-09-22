@@ -347,12 +347,12 @@ def test_revision_sin_cambios_posterior_a_a_en_t1_y_t3():
         for h in resultado.lecturas:
             lecturas = dict(h.lecturas)
             por_lectura.setdefault((lecturas.get("AC"), lecturas.get("TR")), set()).add(
-                (h.periodico.norma, h.periodico.ancla, h.periodico.fecha_limite, h.estado)
+                tuple((p.norma, p.ancla, p.fecha_limite, h.estado) for p in h.periodicos)
             )
-        assert por_lectura[("AC-2", "TR-1")] == {("RD", D("2025-01-15"), D("2028-01-15"), "vencida")}
+        assert por_lectura[("AC-2", "TR-1")] == {(("RD", D("2025-01-15"), D("2028-01-15"), "vencida"),)}
         assert por_lectura[("AC-2", "TR-2")] == {
-            ("AMLR", D("2027-12-01"), D("2032-12-01"), "en_plazo"),
-            ("AMLR", D("2027-12-01"), D("2030-12-01"), "en_plazo"),
+            (("AMLR", D("2027-12-01"), D("2032-12-01"), "en_plazo"),),
+            (("AMLR", D("2027-12-01"), D("2030-12-01"), "en_plazo"),),
         }
         # Con AC-1 las dos lecturas coinciden y TR no se consulta.
         assert (("AC-1", None)) in por_lectura
@@ -378,11 +378,10 @@ def test_empate_de_componentes_periodicos_en_t4():
         ("RD", D("2028-03-01"), 12, D("2029-03-01")),
         ("AMLR", D("2028-03-01"), 12, D("2029-03-01")),
     ]
-    assert hoja.periodico is None
     assert r["T-4"].fechas_proxima_revision == (D("2029-03-01"),)
     # Sin empate, un solo componente.
     (hoja,) = r["ley_rd"].lecturas
-    assert hoja.periodico.norma == "RD"
+    assert [p.norma for p in hoja.periodicos] == ["RD"]
 
 
 def test_empate_de_bases_de_un_evento():

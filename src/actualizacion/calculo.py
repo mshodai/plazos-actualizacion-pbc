@@ -163,15 +163,10 @@ class Lectura:
     lecturas: tuple[tuple[str, str], ...]
     estado: str
     fecha_proxima_revision: date | None
+    # Uno, o varios si empatan en la fecha límite (D-34). Nunca vacío.
     periodicos: tuple[Periodico, ...]
     eventos: tuple[EventoPendiente, ...]
     avisos: tuple[str, ...]
-
-    @property
-    def periodico(self) -> Periodico | None:
-        """El componente periódico si solo hay uno. Con un empate entre normas
-        (D-34) hay varios, en `periodicos`, y esto es None."""
-        return self.periodicos[0] if len(self.periodicos) == 1 else None
 
 
 @dataclass(frozen=True)
