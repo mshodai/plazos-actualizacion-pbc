@@ -2,6 +2,8 @@
 
 Un sujeto obligado por la normativa de prevención del blanqueo de capitales tiene que mantener actualizada la información de sus clientes: revisarla cada cierto tiempo y cuando pasa algo que la puede cambiar. Revisar tarde es un incumplimiento. Hasta ahora, en España, para los clientes que no son de riesgo superior al promedio el plazo lo decidía el manual de cada entidad. Con el Reglamento (UE) 2024/1624 (AMLR), aplicable desde el 10 de julio de 2027, hay un máximo: un año para los clientes de riesgo elevado a los que se aplican medidas reforzadas, y cinco para los demás.
 
+Sitio: https://mshodai.github.io/plazos-actualizacion-pbc/, por qué una revisión que no cambia nada puede no reiniciar el plazo del AMLR.
+
 El escenario. Una entidad tiene un cliente de riesgo medio desde 2020. Su manual fija una revisión cada 36 meses. Lo revisó en enero de 2025 y otra vez el 1 de diciembre de 2027, y en esa segunda revisión no encontró nada que cambiar. En marzo de 2028 alguien pregunta cuándo toca la próxima revisión:
 - **Con el Real Decreto 304/2014:** la revisión de diciembre cuenta, así que la próxima es en diciembre de 2030.
 - **Con el AMLR:** depende de si una revisión que no cambia nada es una «actualización» y de si el plazo que obliga es el del manual o el máximo de cinco años.
