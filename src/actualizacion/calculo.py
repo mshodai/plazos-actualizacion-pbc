@@ -697,15 +697,25 @@ class _Evaluador:
             # D-25, T-4: con las dos normas; rige la activación más temprana (D-21).
             activaciones = [a for a in (self._activacion_rd(ev), self._activacion_amlr(ev)) if a]
             return min(activaciones) if activaciones else None
-        # D-25, T-1 a T-3: la norma aplicable en la fecha de activación. Primero el RD,
-        # si puede activarse antes de A; si no, el AMLR, si se activa en A o después.
+        # D-25, T-1 a T-3: la norma aplicable en la fecha de activación: el RD si lo
+        # activa antes de A, el AMLR si lo activa en A o después. El RD no puede
+        # activarlo antes de A si el hecho y su conocimiento son posteriores.
         rd = None
         if min(ev.fecha_hecho, ev.fecha_conocimiento) < self.A:
             rd = self._activacion_rd(ev)
-            if rd and rd[0] < self.A:
-                return rd
         amlr = self._activacion_amlr(ev)
-        if amlr and amlr[0] >= self.A:
+        rd_en_su_periodo = rd is not None and rd[0] < self.A
+        amlr_en_su_periodo = amlr is not None and amlr[0] >= self.A
+        if rd_en_su_periodo and amlr_en_su_periodo:
+            # D-32: las dos lo activan en su periodo. Ninguna tiene preferencia.
+            self._aviso(
+                f"El evento {ev.id} se activa con el RD el {rd[0]} (antes de A) y con el AMLR el "
+                f"{amlr[0]} (en A o después): lecturas TD-1 y TD-2 (D-32)."
+            )
+            return self.e.elegir("TD", {"TD-1": rd, "TD-2": amlr}, [self._dato_evento(ev)])
+        if rd_en_su_periodo:
+            return rd
+        if amlr_en_su_periodo:
             return amlr
         if rd is None:
             # Antes de A y sin supuesto en el RD: no obliga (D-25).

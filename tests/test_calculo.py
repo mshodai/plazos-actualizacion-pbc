@@ -283,3 +283,39 @@ def test_evento_que_ninguna_norma_activa_en_su_periodo():
     # Fuera de la transición no hay conflicto: ni `ley_rd`, ni `amlr`, ni T-4.
     for regimen in ("ley_rd", "amlr", "T-4"):
         assert all("TE" not in dict(h.lecturas) for h in r[regimen].lecturas)
+
+
+def test_evento_que_las_dos_normas_activan_en_su_periodo():
+    # D-32: información de riesgo con el hecho antes de A y el conocimiento después.
+    # Con L72-2 y LC-2, la Ley 7.2 la activa el 2027-06-01 (antes de A) y la letra c)
+    # del AMLR el 2027-08-01 (después). Antes ganaba el RD por comprobarse primero.
+    r = calcular(
+        entrada(
+            "2027-08-20",
+            "2020-01-10",
+            [clasificacion("2020-01-10")],
+            [revision("R1", "inicial", "2020-01-10"), revision("R2", "periodica", "2025-06-01")],
+            [evento("E", "informacion_de_riesgo", "2027-06-01", "2027-08-01")],
+            versiones=[version(plazo=30)],
+        )
+    )
+    for t in ("T-1", "T-2", "T-3"):
+        resultado = r[t]
+        assert resultado.estado == "indeterminado"
+        assert "TD" in [a.dimension for a in resultado.atribuciones]
+        assert any("D-32" in a for a in resultado.avisos)
+        td = {
+            dict(h.lecturas)["TD"]: h
+            for h in resultado.lecturas
+            if dict(h.lecturas).get("L72") == "L72-2" and dict(h.lecturas).get("LC (informacion_de_riesgo)") == "LC-2"
+        }
+        assert [(e.base, e.fecha_activacion, e.fecha_limite, e.estado) for e in td["TD-1"].eventos] == [
+            ("Ley 7.2", D("2027-06-01"), D("2027-07-01"), "vencida")
+        ]
+        assert [(e.base, e.fecha_activacion, e.fecha_limite, e.estado) for e in td["TD-2"].eventos] == [
+            ("AMLR 26.3.c", D("2027-08-01"), D("2027-08-31"), "en_plazo")
+        ]
+        # TD solo se consulta cuando el RD activa el evento.
+        assert all("TD" not in dict(h.lecturas) for h in resultado.lecturas if dict(h.lecturas).get("L72") == "L72-1")
+    for regimen in ("ley_rd", "amlr", "T-4"):
+        assert all("TD" not in dict(h.lecturas) for h in r[regimen].lecturas)

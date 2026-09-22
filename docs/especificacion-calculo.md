@@ -122,6 +122,7 @@ Las dimensiones de lectura son estas:
 | Letra del art. 26.3 en los eventos sin supuesto claro (S-9) | EV-A, EV-C, EV-N | AMLR | §6.3 |
 | Transición (S-2) | T-1 a T-4 | transición | §5 |
 | Evento que ninguna norma activa en su periodo, en T-1 a T-3 | TE-1, TE-2, TE-3 | transición | §5.2 |
+| Evento que las dos normas activan en su periodo, en T-1 a T-3 | TD-1, TD-2 | transición | §5.2 |
 
 ---
 
@@ -329,6 +330,15 @@ Notas:
   - **TE-3. Ninguna.** Es la lectura literal de D-25: ninguna norma lo activa dentro de su periodo.
 
   La versión anterior del cálculo aplicaba TE-3 sin decirlo: el evento desaparecía de la lectura sin ningún aviso.
+- **[D-32] Evento que las dos normas activan en su propio periodo.** Con T-1, T-2 y T-3, la regla de D-25 se cumple para las dos normas cuando el RD activa el evento antes de A y el AMLR en A o después. D-25 no dice cuál prevalece.
+
+  Ocurre cuando el hecho es anterior a A y su conocimiento posterior, y el RD usa la fecha del hecho mientras el AMLR usa la del conocimiento. Por ejemplo, una información de riesgo, en la combinación L72-2 y LC-2: la Ley 7.2 la activa en la fecha del hecho y la letra c) del AMLR en la del conocimiento. También un tipo sin letra clara leído como letra c) (EV-C), si la Ley 7.2 se aplica.
+
+  Hay dos lecturas, y el resultado lleva además un aviso:
+  - **TD-1. El RD.** El hecho ocurrió y activó la revisión mientras regía el RD, y esa obligación no desaparece el día A. Es también la activación más temprana, como en [D-21].
+  - **TD-2. El AMLR.** Desde A rige el AMLR, y el AMLR fija la activación en la fecha del conocimiento, que es posterior a A.
+
+  La versión anterior del cálculo aplicaba TD-1 sin decirlo, porque comprobaba primero el RD.
 - **[D-28]** La salida compara T-1 a T-4 y dice expresamente si no coinciden: el estado del cliente en R depende entonces de cómo se resuelva S-2. También dice si `ley_rd` y `amlr` no coinciden.
 
 ---
@@ -682,3 +692,4 @@ Lleva la misma advertencia que en `plazos-conservacion-pbc`: es un cálculo bajo
 | D-29 | La próxima revisión obligatoria es la fecha límite sin cumplir más temprana; los eventos sin plazo van aparte. | §1.4 |
 | D-30 | Una dimensión causa el `indeterminado` si, en alguna combinación de las demás, cambiar solo esa cambia el estado; sin combinación de referencia. Se dan sus lecturas con sus estados y los datos que la ponen en juego. | §1.5 |
 | D-31 | En T-1 a T-3, un evento que el RD activa en A o después y el AMLR antes de A (o nunca) no se descarta: lecturas TE-1 (RD), TE-2 (AMLR desde A) y TE-3 (ninguna), con aviso. | §5.2 |
+| D-32 | En T-1 a T-3, un evento que el RD activa antes de A y el AMLR en A o después no se resuelve a favor del RD: lecturas TD-1 (RD) y TD-2 (AMLR), con aviso. | §5.2 |
