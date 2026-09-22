@@ -41,3 +41,49 @@ affb9871346a5f33947cf818e2e8199083007d383da87a2c1b7ee4c6ea52d7bb  AMLA-CP-Art26-
 ```
 
 Para comprobarlas: `cd docs/fuentes && shasum -a 256 -c` pegando el bloque anterior en la entrada estándar.
+
+## Datos para la vigilancia automática
+
+Repite en formato legible por máquina el fichero, la URL de descarga y la huella SHA-256 de cada documento de las secciones anteriores. Lo lee el script de `vigilancia-fuentes`, que comprueba que coincida con el texto. Si difieren, prevalece el texto.
+
+En los borradores, `paginas` recoge sus páginas oficiales, donde se anunciarían las directrices finales. Para cada página se guardan las frases sobre directrices finales y los enlaces de descarga que ofrecía el 2026-09-22. El script avisa si aparece otra frase u otra descarga.
+
+```json
+{
+  "documentos": [
+    {
+      "fichero": "BOE-A-2010-6737-consolidado.pdf",
+      "url": "https://www.boe.es/buscar/pdf/2010/BOE-A-2010-6737-consolidado.pdf",
+      "sha256": "4782a40bcf44165a97bc361520fd2b348acf7efbdfaa0a8d876c58332ff8601d"
+    },
+    {
+      "fichero": "BOE-A-2014-4742-consolidado.pdf",
+      "url": "https://www.boe.es/buscar/pdf/2014/BOE-A-2014-4742-consolidado.pdf",
+      "sha256": "59d7be80313780a8cf48e1f3f87b5bd2860855a126472c0374e1c30c7fc19f0d"
+    },
+    {
+      "fichero": "OJ_L_202401624_ES_TXT.pdf",
+      "url": "https://eur-lex.europa.eu/legal-content/ES/TXT/PDF/?uri=OJ:L_202401624",
+      "sha256": "666f18e1b5d4dd6bb7e927328bd8d84420d0919e692288f0b917c357df690974"
+    },
+    {
+      "fichero": "AMLA-CP-Art26-5-AMLR.pdf",
+      "url": "https://www.amla.europa.eu/document/download/46b50078-08ed-4ab1-aea0-28b1a6085755_en?filename=Consultation%20Paper%20-%20Article%2026%285%29%20AMLR.pdf",
+      "sha256": "affb9871346a5f33947cf818e2e8199083007d383da87a2c1b7ee4c6ea52d7bb",
+      "borrador": {
+        "paginas": [
+          {
+            "url": "https://www.amla.europa.eu/policy/public-consultations/consultation-draft-guidelines-ongoing-monitoring-business-relationship_en",
+            "menciones_conocidas": [],
+            "descargas_conocidas": [
+              "https://www.amla.europa.eu/document/download/6c232832-524a-4c54-a865-e74889e6561d_en",
+              "https://www.amla.europa.eu/document/download/7538f893-c14c-4936-8c4b-c413c8743f6a_en",
+              "https://www.amla.europa.eu/document/download/46b50078-08ed-4ab1-aea0-28b1a6085755_en"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
+```
