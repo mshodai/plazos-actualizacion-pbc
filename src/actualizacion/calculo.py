@@ -416,7 +416,10 @@ class _Evaluador:
             previo = _Evaluador(self.entrada, self.e, terminacion)._evaluar_viva(regimen)
             avisos = [f"La relación terminó el {terminacion}: no hay próxima revisión (D-22)."]
             if previo.estado == VENCIDA:
-                avisos.append(f"En la fecha de terminación había una revisión vencida desde {previo.fecha_proxima_revision}.")
+                avisos.append(
+                    f"En la fecha de terminación había una revisión vencida: su fecha límite era el "
+                    f"{previo.fecha_proxima_revision} (D-2, D-22)."
+                )
             return _Resultado(RELACION_TERMINADA, None, (), (), tuple(avisos))
         return self._evaluar_viva(regimen)
 

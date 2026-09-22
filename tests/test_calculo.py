@@ -54,7 +54,7 @@ def test_relacion_terminada():
     )
     assert set(r.estados.values()) == {"relacion_terminada"}
     assert r["ley_rd"].fechas_proxima_revision == (None,)
-    assert any("vencida desde 2022-01-10" in a for a in r["ley_rd"].avisos)
+    assert any("su fecha límite era el 2022-01-10" in a for a in r["ley_rd"].avisos)
 
 
 def test_sin_periodicidad_en_el_manual():
