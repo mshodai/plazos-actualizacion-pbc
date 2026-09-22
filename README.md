@@ -208,6 +208,10 @@ El borrador de la AMLA se usa para construir lecturas del AMLR donde el texto no
 - [calculo-titularidad-real](https://github.com/mshodai/calculo-titularidad-real): calcula la titularidad real bajo la Ley 10/2010 y el AMLR.
 - [plazos-conservacion-pbc](https://github.com/mshodai/plazos-conservacion-pbc): calcula el estado de conservación de la documentación bajo la Ley 10/2010 y el AMLR.
 
+## Licencia
+
+MIT; el texto completo está en [LICENSE](LICENSE). Cubre el código y la documentación de este repositorio, no los documentos de `docs/fuentes/`, que no se incluyen.
+
 ---
 
 Es una implementación de referencia, probada sobre datos sintéticos. No es software de cumplimiento normativo y no constituye asesoramiento jurídico.
