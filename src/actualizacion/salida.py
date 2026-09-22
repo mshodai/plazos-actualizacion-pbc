@@ -57,7 +57,7 @@ _PREGUNTAS = {
         "Si la clasificación o el manual cambian a mitad de un periodo, ¿cuáles rigen y desde cuándo?",
         "S-5, S-13, §2.4",
     ),
-    "SP": ("La clasificación del {} no dice si el riesgo es superior al promedio: ¿lo es?", "D-15, §3.2"),
+    "SP": ("La clasificación del {} no dice si el riesgo es superior al promedio: ¿lo es?", "S-17, D-15, §3.2"),
     "PB": (
         "¿El plazo de un año del AMLR (art. 26.2.a) exige riesgo elevado y medidas de la sección 4, o basta uno?",
         "S-4, §4.2",
@@ -69,11 +69,11 @@ _PREGUNTAS = {
     ),
     "riesgo_elevado_amlr desconocido": (
         "La clasificación del {} no dice si hay riesgo elevado según el AMLR: ¿lo hay?",
-        "D-15, §4.2",
+        "S-17, D-15, §4.2",
     ),
     "medidas_seccion_4_amlr desconocido": (
         "La clasificación del {} no dice si se aplican medidas de la sección 4 del AMLR: ¿se aplican?",
-        "D-15, §4.2",
+        "S-17, D-15, §4.2",
     ),
     "FV": ("¿«Se verifique» (RD 33.1.b) es cuando ocurre el cambio o cuando la entidad lo conoce?", "S-8, §6.2"),
     "L72": (
@@ -84,12 +84,12 @@ _PREGUNTAS = {
     "EV": ("¿A qué letra del art. 26.3 del AMLR corresponde un evento «{}»?", "S-9, §6.3"),
     "TE": (
         "Un evento que el RD activa en A o después y el AMLR antes de A: ¿qué norma lo rige?",
-        "D-31, §5.2",
+        "S-14, D-31, §5.2",
     ),
-    "TD": ("Un evento que las dos normas activan en su propio periodo: ¿cuál rige?", "D-32, §5.2"),
+    "TD": ("Un evento que las dos normas activan en su propio periodo: ¿cuál rige?", "S-15, D-32, §5.2"),
     "TR": (
         "¿Qué norma decide si una revisión posterior a A cierra el periodo del RD?",
-        "D-33, §5.2",
+        "S-16, D-33, §5.2",
     ),
 }
 

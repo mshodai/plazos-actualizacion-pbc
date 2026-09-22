@@ -2,7 +2,7 @@
 
 Este documento explica cómo se calcula, en una fecha de referencia, **la fecha de la próxima revisión obligatoria de la información de un cliente y su estado**. Se calcula con la Ley 10/2010 y su Reglamento, con el AMLR y con cada lectura de la transición entre ambos. La entrada es el JSON de [`modelo-datos.md`](modelo-datos.md), que solo recoge hechos y no lleva régimen. No contiene código.
 
-Siglas y fuentes: las de [`modelo-datos.md`](modelo-datos.md) (detalle y huellas en [`fuentes/FUENTES.md`](fuentes/FUENTES.md)). Las referencias «S-n» remiten a los casos que la norma no resuelve, al final de [`modelo-datos.md`](modelo-datos.md#casos-que-la-norma-no-resuelve). «Modelo, §n» remite a una sección de ese documento.
+Siglas y fuentes: las de [`modelo-datos.md`](modelo-datos.md) (detalle y huellas en [`fuentes/FUENTES.md`](fuentes/FUENTES.md)). Las referencias «S-n» remiten a los casos que la norma no resuelve, en [`ambiguedades.md`](ambiguedades.md). «Modelo, §n» remite a una sección de [`modelo-datos.md`](modelo-datos.md).
 
 Convenciones:
 
@@ -118,7 +118,7 @@ Las dimensiones de lectura son estas:
 | Revisión anticipada (S-3) | RA-1, RA-2, RA-3 | ambos | §2.2 |
 | Revisión sin cambios (S-6) | AC-1, AC-2 | AMLR | §2.3 |
 | Clasificación o manual que cambian a mitad de periodo (S-5, S-13) | FR-1, FR-2, FR-3 | ambos | §2.4 |
-| Riesgo superior al promedio sin calificar | SP-1, SP-2 | Ley y RD | §3.2 |
+| Riesgo superior al promedio sin calificar (S-17) | SP-1, SP-2 | Ley y RD | §3.2 |
 | Elementos del art. 26.2.a (S-4) | PB-1, PB-2 | AMLR | §4.2 |
 | Cliente sin calificación con el AMLR (S-2, S-4) | NC-1, NC-2 | AMLR | §4.2 |
 | Manual más corto que el límite legal (S-11) | PM-1, PM-2 | AMLR | §4.2 |
@@ -127,9 +127,9 @@ Las dimensiones de lectura son estas:
 | Información de riesgo u `otro` como «cambio de circunstancias» en la Ley 7.2 (S-9) | LC-1, LC-2 | Ley y RD | §6.2 |
 | Letra del art. 26.3 en los eventos sin supuesto claro (S-9) | EV-A, EV-C, EV-N | AMLR | §6.3 |
 | Transición (S-2) | T-1 a T-4 | transición | §5 |
-| Evento que ninguna norma activa en su periodo, en T-1 a T-3 | TE-1, TE-2, TE-3 | transición | §5.2 |
-| Evento que las dos normas activan en su periodo, en T-1 a T-3 | TD-1, TD-2 | transición | §5.2 |
-| Norma que decide si una revisión posterior a A cierra el periodo del RD, en T-1 y T-3 | TR-1, TR-2 | transición | §5.2 |
+| Evento que ninguna norma activa en su periodo, en T-1 a T-3 (S-14) | TE-1, TE-2, TE-3 | transición | §5.2 |
+| Evento que las dos normas activan en su periodo, en T-1 a T-3 (S-15) | TD-1, TD-2 | transición | §5.2 |
+| Norma que decide si una revisión posterior a A cierra el periodo del RD, en T-1 y T-3 (S-16) | TR-1, TR-2 | transición | §5.2 |
 
 ---
 
@@ -230,7 +230,7 @@ Con la clasificación C y la versión del manual M que rigen (§2.4), sea Pm la 
 | `false` | Pm. Sin Pm: `sin_plazo`. | RD 11.2: lo «determinará» el manual |
 | `null` | lecturas **SP-1** (como `true`) y **SP-2** (como `false`) | [D-15] |
 
-- **[D-14]** Con riesgo superior al promedio, un manual que fija más de 12 meses se recorta a 12 y se emite un aviso de que el manual incumple el art. 11.2. Sin periodicidad en el manual para ese nivel, se aplican 12 meses: el mínimo del RD rige aunque el manual calle. «Como mínimo, anual» se lee como «al menos una vez al año» (modelo, S-11).
+- **[D-14]** Con riesgo superior al promedio, un manual que fija más de 12 meses se recorta a 12 y se emite un aviso de que el manual incumple el art. 11.2. Sin periodicidad en el manual para ese nivel, se aplican 12 meses: el mínimo del RD rige aunque el manual calle. «Como mínimo, anual» se lee como «al menos una vez al año» (modelo, §3.1).
 - **[D-15]** Un `superior_al_promedio` a `null` significa que la entidad no hizo esa calificación. El cálculo no la deduce de `nivel_entidad`, porque sería decidir por la entidad (modelo, §0, principio 4). Evalúa las dos posibilidades.
 - **[D-16]** Si el cliente no es de riesgo superior al promedio y el manual no fija periodicidad para su nivel, el componente periódico es `sin_plazo`. Ningún texto da un plazo supletorio.
 
@@ -284,7 +284,7 @@ El mismo ancla de §2.2, pero contando las revisiones según AC-n (§2.3).
 | **PM-1. Solo el límite legal** | L. La periodicidad del manual es un procedimiento interno, no el plazo del art. 26.2. |
 | **PM-2. El manual si es más corto** | el menor de L y Pm. Sin Pm: L. El art. 26.2 dice que el período «dependerá del riesgo», y el borrador AMLA, ap. 2, pide decidir «whether more frequent updates are needed» [si hacen falta actualizaciones más frecuentes]. |
 
-- **[D-17]** Un manual con una periodicidad mayor que L no alarga el plazo en ninguna lectura. Se aplica L con un aviso, porque el período «no será en ningún caso superior». Tampoco lo alargan las medidas simplificadas del art. 33.1.b («reducir la frecuencia de las actualizaciones»): se leen dentro del límite, por el «en ningún caso». Es una decisión y no una lectura, y el aviso lo recuerda. La lectura contraria, que el art. 33.1.b sea una excepción al art. 26.2.b, no se calcula (modelo, S-11).
+- **[D-17]** Un manual con una periodicidad mayor que L no alarga el plazo en ninguna lectura. Se aplica L con un aviso, porque el período «no será en ningún caso superior». Tampoco lo alargan las medidas simplificadas del art. 33.1.b («reducir la frecuencia de las actualizaciones»): se leen dentro del límite, por el «en ningún caso». Es una decisión y no una lectura, y el aviso lo recuerda. La lectura contraria, que el art. 33.1.b sea una excepción al art. 26.2.b, no se calcula (S-11).
 
 **Fecha límite periódica** = ancla + P. Estados como en §3.2.
 
@@ -327,7 +327,7 @@ Notas:
 - **[D-27] T-1 y T-3, después de la primera revisión posterior a A**, calculan como `amlr` con esa revisión como ancla. Las lecturas de §2 y §4 se aplican dentro de cada T-n: una T-n puede ser `indeterminado` por sí misma.
 - **T-4** no es solo transitoria: afecta también a los clientes nuevos. Se incluye aquí porque es la que más cambia el resultado desde A. Es la más exigente por construcción.
 - **[D-25] Eventos en la transición.** Con T-1, T-2 y T-3, cada evento se juzga con la norma aplicable en su fecha de activación: el RD si la activación es anterior a A y el AMLR si es posterior o igual. Con T-4, con las dos: el evento obliga si lo activa cualquiera de ellas, y se toma la activación más temprana ([D-21]). La alternativa, aplicar el art. 26.3 del AMLR desde A a eventos anteriores no atendidos, daría a un cambio de titularidad de 2026 que el RD no cubría una revisión exigible desde A. Se descartó porque el art. 26.3 activa la revisión cuando el cambio «se produzca», no después.
-- **[D-31] Evento que ninguna norma activa en su propio periodo.** Con T-1, T-2 y T-3, la regla de D-25 no se cumple para ninguna norma cuando se dan a la vez dos cosas: el RD activa el evento en A o después, y el AMLR lo activa antes de A o no lo activa. El RD ya no se aplica en esa fecha, y el AMLR todavía no se aplicaba en la suya.
+- **[D-31] Evento que ninguna norma activa en su propio periodo (S-14).** Con T-1, T-2 y T-3, la regla de D-25 no se cumple para ninguna norma cuando se dan a la vez dos cosas: el RD activa el evento en A o después, y el AMLR lo activa antes de A o no lo activa. El RD ya no se aplica en esa fecha, y el AMLR todavía no se aplicaba en la suya.
 
   Ocurre con un cambio de actividad cuyo hecho es anterior a A y cuyo conocimiento es posterior, en la combinación FV-2 y L72-1. El RD 33.1.b se activa entonces en la fecha de conocimiento, porque «se verifique» se lee como «se comprueba», y la Ley 7.2 no se aplica. En cambio, la letra a) del AMLR se activa en la fecha del hecho. En los demás tipos, las dos normas usan la misma fecha o el RD la más temprana.
 
@@ -337,7 +337,7 @@ Notas:
   - **TE-3. Ninguna.** Es la lectura literal de D-25: ninguna norma lo activa dentro de su periodo.
 
   La versión anterior del cálculo aplicaba TE-3 sin decirlo: el evento desaparecía de la lectura sin ningún aviso.
-- **[D-32] Evento que las dos normas activan en su propio periodo.** Con T-1, T-2 y T-3, la regla de D-25 se cumple para las dos normas cuando el RD activa el evento antes de A y el AMLR en A o después. D-25 no dice cuál prevalece.
+- **[D-32] Evento que las dos normas activan en su propio periodo (S-15).** Con T-1, T-2 y T-3, la regla de D-25 se cumple para las dos normas cuando el RD activa el evento antes de A y el AMLR en A o después. D-25 no dice cuál prevalece.
 
   Ocurre cuando el hecho es anterior a A y su conocimiento posterior, y el RD usa la fecha del hecho mientras el AMLR usa la del conocimiento. Por ejemplo, una información de riesgo, en la combinación L72-2 y LC-2: la Ley 7.2 la activa en la fecha del hecho y la letra c) del AMLR en la del conocimiento. También un tipo sin letra clara leído como letra c) (EV-C), si la Ley 7.2 se aplica.
 
@@ -346,7 +346,7 @@ Notas:
   - **TD-2. El AMLR.** Desde A rige el AMLR, y el AMLR fija la activación en la fecha del conocimiento, que es posterior a A.
 
   La versión anterior del cálculo aplicaba TD-1 sin decirlo, porque comprobaba primero el RD.
-- **[D-33] Qué norma decide si una revisión posterior a A cierra el periodo del RD.** En T-1 y T-3, un cliente existente pasa al AMLR con «la primera revisión que cuenta con fecha ≥ A» ([D-27]). Mientras no la hay, sigue el periodo del RD calculado con las revisiones anteriores a A. Pero D-27 no dice con qué norma se decide si una revisión posterior a A «cuenta», y las dos normas no cuentan las mismas (§2.3). La diferencia aparece con una revisión `sin_cambios` posterior a A y la lectura AC-2: el AMLR no la cuenta, y el RD sí.
+- **[D-33] Qué norma decide si una revisión posterior a A cierra el periodo del RD (S-16).** En T-1 y T-3, un cliente existente pasa al AMLR con «la primera revisión que cuenta con fecha ≥ A» ([D-27]). Mientras no la hay, sigue el periodo del RD calculado con las revisiones anteriores a A. Pero D-27 no dice con qué norma se decide si una revisión posterior a A «cuenta», y las dos normas no cuentan las mismas (§2.3). La diferencia aparece con una revisión `sin_cambios` posterior a A y la lectura AC-2: el AMLR no la cuenta, y el RD sí.
 
   Hay dos lecturas. El resultado lleva además un aviso cuando dan periodos distintos:
   - **TR-1. El AMLR.** La revisión es posterior a A, y desde A rige el AMLR. Con AC-2, la revisión no cuenta para nadie: no abre el periodo del AMLR, y el periodo del RD solo tiene en cuenta las revisiones anteriores a A.
