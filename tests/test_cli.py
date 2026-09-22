@@ -3,10 +3,13 @@
 import json
 import subprocess
 import sys
+from pathlib import Path
 
 import pytest
 
 from actualizacion.cli import main
+
+CORPUS = Path(__file__).resolve().parent.parent / "corpus"
 
 
 def _datos(referencia, clasificaciones, revisiones, eventos=(), periodicidades=None, inicio="2020-03-02"):
@@ -116,8 +119,19 @@ def test_exige_actuar_dice_que_lectura_lo_activa(fichero, capsys):
     assert {"regimen": "amlr", "lecturas": ["PM-1"], "estado": "en_plazo"} not in activado_por
     assert main([fichero(datos)]) == 1
     salida = capsys.readouterr().out
-    assert "PM-2: vencida (estado del régimen: indeterminado)" in salida
+    assert "amlr (estado del régimen: indeterminado):\n      PM-2: vencida" in salida
     assert "sin lecturas que decidir: vencida" in salida
+
+
+def test_exige_actuar_agrupa_los_regimenes_iguales(capsys):
+    # Caso 05 del corpus: los seis regímenes dan las mismas tres combinaciones vencidas y son
+    # indeterminado. Una sola entrada para los seis, sin resumir (tres combinaciones).
+    assert main([str(CORPUS / "05-revision-anticipada-puede-reiniciar.json")]) == 1
+    salida = capsys.readouterr().out
+    apartado = salida.split("Exige actuar")[1].split("\n\n")[0]
+    assert "    ley_rd, amlr, T-1, T-2, T-3, T-4 (estado del régimen: indeterminado):" in apartado
+    assert apartado.count("RA-2: vencida") == 1
+    assert "combinaciones más" not in apartado
 
 
 def test_json(fichero, capsys):

@@ -365,22 +365,28 @@ MAX_ACTIVADORES_TEXTO = 3
 def _exige_actuar_texto(inf) -> list[str]:
     """D-41: qué régimen y qué lecturas exigen actuar, para que el código 1 se explique en el informe.
 
-    En texto, más de tres combinaciones por régimen se resumen; el JSON las da todas.
+    Los regímenes con exactamente las mismas combinaciones, estados y nota se agrupan en una
+    entrada. Después de agrupar, más de tres combinaciones en una entrada se resumen; el JSON las
+    da todas.
     """
     if not inf.exige_actuar:
         return ["  No: ninguna lectura de ningún régimen exige actuar (D-41)."]
-    lineas = ["  Sí (D-41). Lo exigen:"]
     por_regimen: dict[str, list[str]] = {}
     for a in inf.activadores:
         lecturas = " y ".join(a.lecturas) if a.lecturas else "sin lecturas que decidir"
         por_regimen.setdefault(a.regimen, []).append(f"{lecturas}: {a.estado}")
+    grupos: dict[tuple, list[str]] = {}
     for regimen, combinaciones in por_regimen.items():
-        mostradas = combinaciones[:MAX_ACTIVADORES_TEXTO]
-        resto = len(combinaciones) - len(mostradas)
-        texto_resto = f"; y {resto} combinaciones más (todas en --json)" if resto else ""
         estado = inf[regimen].estado
-        nota = "" if estado in ESTADOS_QUE_EXIGEN_ACTUAR else f" (estado del régimen: {estado})"
-        lineas.append(f"    {regimen:<{ANCHO_REGIMEN}}  {'; '.join(mostradas)}{texto_resto}{nota}")
+        nota = "" if estado in ESTADOS_QUE_EXIGEN_ACTUAR else f"estado del régimen: {estado}"
+        grupos.setdefault((tuple(combinaciones), nota), []).append(regimen)
+    lineas = ["  Sí (D-41). Lo exigen:"]
+    for (combinaciones, nota), regimenes in grupos.items():
+        lineas.append(f"    {', '.join(regimenes)}" + (f" ({nota})" if nota else "") + ":")
+        mostradas = combinaciones[:MAX_ACTIVADORES_TEXTO]
+        lineas += [f"      {c}" for c in mostradas]
+        if resto := len(combinaciones) - len(mostradas):
+            lineas.append(f"      y {resto} combinaciones más (todas en --json)")
     return lineas
 
 
