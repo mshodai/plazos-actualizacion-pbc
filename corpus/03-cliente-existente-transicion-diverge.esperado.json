@@ -1,0 +1,71 @@
+{
+  "caso": "03-cliente-existente-transicion-diverge",
+  "demuestra": "Cliente de riesgo bajo desde el 2012-02-01, con un manual de 120 meses por medidas simplificadas y la última revisión el 2024-01-15, calificado con el AMLR el 2027-07-10; a fecha 2030-01-01. Con el RD vence el 2034-01-15; con el AMLR, el 2029-01-15, porque el manual no puede superar cinco años (D-17). Las cuatro lecturas de la transición se separan: T-1 mantiene el RD (en_plazo), T-2 y T-4 aplican el AMLR (vencida) y T-3 cuenta cinco años desde el 2027-07-10 (en_plazo hasta el 2032-07-10).",
+  "resultado": {
+    "codigo_salida": 1,
+    "regimenes": {
+      "ley_rd": {
+        "estado": "en_plazo",
+        "fechas": [
+          "2034-01-15"
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": []
+      },
+      "amlr": {
+        "estado": "vencida",
+        "fechas": [
+          "2029-01-15"
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": [
+          "D-17"
+        ]
+      },
+      "T-1": {
+        "estado": "en_plazo",
+        "fechas": [
+          "2034-01-15"
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": []
+      },
+      "T-2": {
+        "estado": "vencida",
+        "fechas": [
+          "2029-01-15"
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": [
+          "D-17"
+        ]
+      },
+      "T-3": {
+        "estado": "en_plazo",
+        "fechas": [
+          "2032-07-10"
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": [
+          "D-17"
+        ]
+      },
+      "T-4": {
+        "estado": "vencida",
+        "fechas": [
+          "2029-01-15"
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": [
+          "D-17"
+        ]
+      }
+    }
+  }
+}

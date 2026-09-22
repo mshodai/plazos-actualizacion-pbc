@@ -1,0 +1,375 @@
+{
+  "caso": "05-revision-anticipada-puede-reiniciar",
+  "demuestra": "Cliente de riesgo medio desde el 2028-01-10, con un manual de 60 meses que no dice si una revisión anticipada reinicia el plazo. Un cambio de titularidad provoca una revisión el 2029-06-15. A fecha 2033-03-01, el «can reset» del borrador de la AMLA decide el estado en los seis regímenes: si la revisión reinicia el plazo (RA-1), vence el 2034-06-15; si no (RA-2), venció el 2033-01-10; si lo decide el manual (RA-3), como el manual calla, las dos cosas (S-3, D-10).",
+  "resultado": {
+    "codigo_salida": 1,
+    "regimenes": {
+      "ley_rd": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2033-01-10",
+          "2034-06-15"
+        ],
+        "decisiones": {
+          "RA": {
+            "pregunta": "¿Una revisión hecha antes de tiempo reinicia el plazo de la siguiente?",
+            "respuestas": {
+              "RA-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2034-06-15"
+                ],
+                "depende_de": []
+              },
+              "RA-2": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2033-01-10"
+                ],
+                "depende_de": []
+              },
+              "RA-3 (las revisiones con el manual a null no reinician)": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2033-01-10"
+                ],
+                "depende_de": []
+              },
+              "RA-3 (reinician hasta REV-FICTICIO-1)": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2033-01-10"
+                ],
+                "depende_de": []
+              },
+              "RA-3 (reinician hasta REV-FICTICIO-2)": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2034-06-15"
+                ],
+                "depende_de": []
+              }
+            }
+          }
+        },
+        "eventos": [],
+        "avisos": []
+      },
+      "amlr": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2033-01-10",
+          "2034-06-15"
+        ],
+        "decisiones": {
+          "RA": {
+            "pregunta": "¿Una revisión hecha antes de tiempo reinicia el plazo de la siguiente?",
+            "respuestas": {
+              "RA-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2034-06-15"
+                ],
+                "depende_de": []
+              },
+              "RA-2": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2033-01-10"
+                ],
+                "depende_de": []
+              },
+              "RA-3 (las revisiones con el manual a null no reinician)": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2033-01-10"
+                ],
+                "depende_de": []
+              },
+              "RA-3 (reinician hasta REV-FICTICIO-1)": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2033-01-10"
+                ],
+                "depende_de": []
+              },
+              "RA-3 (reinician hasta REV-FICTICIO-2)": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2034-06-15"
+                ],
+                "depende_de": []
+              }
+            }
+          }
+        },
+        "eventos": [],
+        "avisos": []
+      },
+      "T-1": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2033-01-10",
+          "2034-06-15"
+        ],
+        "decisiones": {
+          "RA": {
+            "pregunta": "¿Una revisión hecha antes de tiempo reinicia el plazo de la siguiente?",
+            "respuestas": {
+              "RA-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2034-06-15"
+                ],
+                "depende_de": []
+              },
+              "RA-2": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2033-01-10"
+                ],
+                "depende_de": []
+              },
+              "RA-3 (las revisiones con el manual a null no reinician)": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2033-01-10"
+                ],
+                "depende_de": []
+              },
+              "RA-3 (reinician hasta REV-FICTICIO-1)": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2033-01-10"
+                ],
+                "depende_de": []
+              },
+              "RA-3 (reinician hasta REV-FICTICIO-2)": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2034-06-15"
+                ],
+                "depende_de": []
+              }
+            }
+          }
+        },
+        "eventos": [],
+        "avisos": []
+      },
+      "T-2": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2033-01-10",
+          "2034-06-15"
+        ],
+        "decisiones": {
+          "RA": {
+            "pregunta": "¿Una revisión hecha antes de tiempo reinicia el plazo de la siguiente?",
+            "respuestas": {
+              "RA-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2034-06-15"
+                ],
+                "depende_de": []
+              },
+              "RA-2": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2033-01-10"
+                ],
+                "depende_de": []
+              },
+              "RA-3 (las revisiones con el manual a null no reinician)": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2033-01-10"
+                ],
+                "depende_de": []
+              },
+              "RA-3 (reinician hasta REV-FICTICIO-1)": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2033-01-10"
+                ],
+                "depende_de": []
+              },
+              "RA-3 (reinician hasta REV-FICTICIO-2)": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2034-06-15"
+                ],
+                "depende_de": []
+              }
+            }
+          }
+        },
+        "eventos": [],
+        "avisos": []
+      },
+      "T-3": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2033-01-10",
+          "2034-06-15"
+        ],
+        "decisiones": {
+          "RA": {
+            "pregunta": "¿Una revisión hecha antes de tiempo reinicia el plazo de la siguiente?",
+            "respuestas": {
+              "RA-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2034-06-15"
+                ],
+                "depende_de": []
+              },
+              "RA-2": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2033-01-10"
+                ],
+                "depende_de": []
+              },
+              "RA-3 (las revisiones con el manual a null no reinician)": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2033-01-10"
+                ],
+                "depende_de": []
+              },
+              "RA-3 (reinician hasta REV-FICTICIO-1)": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2033-01-10"
+                ],
+                "depende_de": []
+              },
+              "RA-3 (reinician hasta REV-FICTICIO-2)": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2034-06-15"
+                ],
+                "depende_de": []
+              }
+            }
+          }
+        },
+        "eventos": [],
+        "avisos": []
+      },
+      "T-4": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2033-01-10",
+          "2034-06-15"
+        ],
+        "decisiones": {
+          "RA": {
+            "pregunta": "¿Una revisión hecha antes de tiempo reinicia el plazo de la siguiente?",
+            "respuestas": {
+              "RA-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2034-06-15"
+                ],
+                "depende_de": []
+              },
+              "RA-2": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2033-01-10"
+                ],
+                "depende_de": []
+              },
+              "RA-3 (las revisiones con el manual a null no reinician)": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2033-01-10"
+                ],
+                "depende_de": []
+              },
+              "RA-3 (reinician hasta REV-FICTICIO-1)": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2033-01-10"
+                ],
+                "depende_de": []
+              },
+              "RA-3 (reinician hasta REV-FICTICIO-2)": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2034-06-15"
+                ],
+                "depende_de": []
+              }
+            }
+          }
+        },
+        "eventos": [],
+        "avisos": []
+      }
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "version_modelo": 1,
+  "fecha_referencia": "2033-03-01",
+  "sujeto": {
+    "actividad": "otra"
+  },
+  "manual": {
+    "versiones": [
+      {
+        "id": "MANUAL-FICTICIO",
+        "vigente_desde": "2000-01-01",
+        "periodicidades": [
+          {
+            "nivel_entidad": "medio",
+            "meses": 60
+          }
+        ],
+        "plazo_revision_por_evento_dias": null,
+        "revision_anticipada_reinicia_plazo": null
+      }
+    ]
+  },
+  "cliente": {
+    "id": "CLI-FICTICIO-05",
+    "fecha_inicio_relacion": "2028-01-10",
+    "fecha_terminacion_relacion": null,
+    "clasificaciones": [
+      {
+        "fecha": "2028-01-10",
+        "nivel_entidad": "medio",
+        "superior_al_promedio": false,
+        "riesgo_elevado_amlr": false,
+        "medidas_seccion_4_amlr": false
+      }
+    ],
+    "revisiones": [
+      {
+        "id": "REV-FICTICIO-1",
+        "tipo": "inicial",
+        "fecha": "2028-01-10",
+        "resultado": "actualizada",
+        "eventos": []
+      },
+      {
+        "id": "REV-FICTICIO-2",
+        "tipo": "por_evento",
+        "fecha": "2029-06-15",
+        "resultado": "actualizada",
+        "eventos": [
+          "EV-FICTICIO-1"
+        ]
+      }
+    ],
+    "eventos": [
+      {
+        "id": "EV-FICTICIO-1",
+        "tipo": "cambio_titularidad_real_o_control",
+        "descripcion": "Hecho ficticio: entrada de un socio inventado",
+        "fecha_hecho": "2029-05-02",
+        "fecha_conocimiento": "2029-05-20",
+        "relevante_segun_entidad": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,535 @@
+{
+  "caso": "06-evento-conocido-despues-del-10-de-julio-de-2027",
+  "demuestra": "Cliente de riesgo medio desde el 2020-01-10. Una información de riesgo ocurre el 2027-06-01 y la entidad la conoce el 2027-08-01: el hecho y el conocimiento caen a distinto lado del 2027-07-10. El manual da 30 días para revisar tras un evento. A fecha 2027-08-20, con el AMLR (letra c, desde el conocimiento) la revisión vence el 2027-08-31: en_plazo. Con la Ley 7.2, si se aplica a este cliente (L72-2) y la información es un cambio de circunstancias (LC-2), cuenta desde el hecho y venció el 2027-07-01. En T-1 a T-3 las dos normas lo activan en su propio periodo, y además hay que decidir cuál rige (TD, D-32).",
+  "resultado": {
+    "codigo_salida": 1,
+    "regimenes": {
+      "ley_rd": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2027-07-01",
+          "2028-06-01"
+        ],
+        "decisiones": {
+          "L72": {
+            "pregunta": "¿El art. 7.2 de la Ley se aplica a cualquier cliente o solo a los que ya lo eran cuando entró en vigor?",
+            "respuestas": {
+              "L72-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2028-06-01"
+                ],
+                "depende_de": []
+              },
+              "L72-2": {
+                "estados": [
+                  "en_plazo",
+                  "vencida"
+                ],
+                "fechas": [
+                  "2027-07-01",
+                  "2028-06-01"
+                ],
+                "depende_de": [
+                  "LC (informacion_de_riesgo)"
+                ]
+              }
+            }
+          },
+          "LC (informacion_de_riesgo)": {
+            "pregunta": "¿Un evento «informacion_de_riesgo» es un cambio de las circunstancias del cliente (Ley 7.2)?",
+            "respuestas": {
+              "LC-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2028-06-01"
+                ],
+                "depende_de": []
+              },
+              "LC-2": {
+                "estados": [
+                  "en_plazo",
+                  "vencida"
+                ],
+                "fechas": [
+                  "2027-07-01",
+                  "2028-06-01"
+                ],
+                "depende_de": [
+                  "L72"
+                ]
+              }
+            }
+          }
+        },
+        "eventos": [
+          [
+            "EV-FICTICIO-1",
+            [
+              "Ley 7.2"
+            ],
+            "2027-06-01",
+            "2027-07-01",
+            "vencida"
+          ]
+        ],
+        "avisos": []
+      },
+      "amlr": {
+        "estado": "en_plazo",
+        "fechas": [
+          "2027-08-31"
+        ],
+        "decisiones": {},
+        "eventos": [
+          [
+            "EV-FICTICIO-1",
+            [
+              "AMLR 26.3.c"
+            ],
+            "2027-08-01",
+            "2027-08-31",
+            "en_plazo"
+          ]
+        ],
+        "avisos": []
+      },
+      "T-1": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2027-07-01",
+          "2027-08-31"
+        ],
+        "decisiones": {
+          "L72": {
+            "pregunta": "¿El art. 7.2 de la Ley se aplica a cualquier cliente o solo a los que ya lo eran cuando entró en vigor?",
+            "respuestas": {
+              "L72-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2027-08-31"
+                ],
+                "depende_de": []
+              },
+              "L72-2": {
+                "estados": [
+                  "en_plazo",
+                  "vencida"
+                ],
+                "fechas": [
+                  "2027-07-01",
+                  "2027-08-31"
+                ],
+                "depende_de": [
+                  "LC (informacion_de_riesgo)",
+                  "TD"
+                ]
+              }
+            }
+          },
+          "LC (informacion_de_riesgo)": {
+            "pregunta": "¿Un evento «informacion_de_riesgo» es un cambio de las circunstancias del cliente (Ley 7.2)?",
+            "respuestas": {
+              "LC-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2027-08-31"
+                ],
+                "depende_de": []
+              },
+              "LC-2": {
+                "estados": [
+                  "en_plazo",
+                  "vencida"
+                ],
+                "fechas": [
+                  "2027-07-01",
+                  "2027-08-31"
+                ],
+                "depende_de": [
+                  "L72",
+                  "TD"
+                ]
+              }
+            }
+          },
+          "TD": {
+            "pregunta": "Un evento que las dos normas activan en su propio periodo: ¿cuál rige?",
+            "respuestas": {
+              "TD-1": {
+                "estados": [
+                  "en_plazo",
+                  "vencida"
+                ],
+                "fechas": [
+                  "2027-07-01",
+                  "2027-08-31"
+                ],
+                "depende_de": [
+                  "L72",
+                  "LC (informacion_de_riesgo)"
+                ]
+              },
+              "TD-2": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2027-08-31"
+                ],
+                "depende_de": []
+              }
+            }
+          }
+        },
+        "eventos": [
+          [
+            "EV-FICTICIO-1",
+            [
+              "AMLR 26.3.c"
+            ],
+            "2027-08-01",
+            "2027-08-31",
+            "en_plazo"
+          ],
+          [
+            "EV-FICTICIO-1",
+            [
+              "Ley 7.2"
+            ],
+            "2027-06-01",
+            "2027-07-01",
+            "vencida"
+          ]
+        ],
+        "avisos": [
+          "D-32"
+        ]
+      },
+      "T-2": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2027-07-01",
+          "2027-08-31"
+        ],
+        "decisiones": {
+          "L72": {
+            "pregunta": "¿El art. 7.2 de la Ley se aplica a cualquier cliente o solo a los que ya lo eran cuando entró en vigor?",
+            "respuestas": {
+              "L72-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2027-08-31"
+                ],
+                "depende_de": []
+              },
+              "L72-2": {
+                "estados": [
+                  "en_plazo",
+                  "vencida"
+                ],
+                "fechas": [
+                  "2027-07-01",
+                  "2027-08-31"
+                ],
+                "depende_de": [
+                  "LC (informacion_de_riesgo)",
+                  "TD"
+                ]
+              }
+            }
+          },
+          "LC (informacion_de_riesgo)": {
+            "pregunta": "¿Un evento «informacion_de_riesgo» es un cambio de las circunstancias del cliente (Ley 7.2)?",
+            "respuestas": {
+              "LC-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2027-08-31"
+                ],
+                "depende_de": []
+              },
+              "LC-2": {
+                "estados": [
+                  "en_plazo",
+                  "vencida"
+                ],
+                "fechas": [
+                  "2027-07-01",
+                  "2027-08-31"
+                ],
+                "depende_de": [
+                  "L72",
+                  "TD"
+                ]
+              }
+            }
+          },
+          "TD": {
+            "pregunta": "Un evento que las dos normas activan en su propio periodo: ¿cuál rige?",
+            "respuestas": {
+              "TD-1": {
+                "estados": [
+                  "en_plazo",
+                  "vencida"
+                ],
+                "fechas": [
+                  "2027-07-01",
+                  "2027-08-31"
+                ],
+                "depende_de": [
+                  "L72",
+                  "LC (informacion_de_riesgo)"
+                ]
+              },
+              "TD-2": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2027-08-31"
+                ],
+                "depende_de": []
+              }
+            }
+          }
+        },
+        "eventos": [
+          [
+            "EV-FICTICIO-1",
+            [
+              "AMLR 26.3.c"
+            ],
+            "2027-08-01",
+            "2027-08-31",
+            "en_plazo"
+          ],
+          [
+            "EV-FICTICIO-1",
+            [
+              "Ley 7.2"
+            ],
+            "2027-06-01",
+            "2027-07-01",
+            "vencida"
+          ]
+        ],
+        "avisos": [
+          "D-32"
+        ]
+      },
+      "T-3": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2027-07-01",
+          "2027-08-31"
+        ],
+        "decisiones": {
+          "L72": {
+            "pregunta": "¿El art. 7.2 de la Ley se aplica a cualquier cliente o solo a los que ya lo eran cuando entró en vigor?",
+            "respuestas": {
+              "L72-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2027-08-31"
+                ],
+                "depende_de": []
+              },
+              "L72-2": {
+                "estados": [
+                  "en_plazo",
+                  "vencida"
+                ],
+                "fechas": [
+                  "2027-07-01",
+                  "2027-08-31"
+                ],
+                "depende_de": [
+                  "LC (informacion_de_riesgo)",
+                  "TD"
+                ]
+              }
+            }
+          },
+          "LC (informacion_de_riesgo)": {
+            "pregunta": "¿Un evento «informacion_de_riesgo» es un cambio de las circunstancias del cliente (Ley 7.2)?",
+            "respuestas": {
+              "LC-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2027-08-31"
+                ],
+                "depende_de": []
+              },
+              "LC-2": {
+                "estados": [
+                  "en_plazo",
+                  "vencida"
+                ],
+                "fechas": [
+                  "2027-07-01",
+                  "2027-08-31"
+                ],
+                "depende_de": [
+                  "L72",
+                  "TD"
+                ]
+              }
+            }
+          },
+          "TD": {
+            "pregunta": "Un evento que las dos normas activan en su propio periodo: ¿cuál rige?",
+            "respuestas": {
+              "TD-1": {
+                "estados": [
+                  "en_plazo",
+                  "vencida"
+                ],
+                "fechas": [
+                  "2027-07-01",
+                  "2027-08-31"
+                ],
+                "depende_de": [
+                  "L72",
+                  "LC (informacion_de_riesgo)"
+                ]
+              },
+              "TD-2": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2027-08-31"
+                ],
+                "depende_de": []
+              }
+            }
+          }
+        },
+        "eventos": [
+          [
+            "EV-FICTICIO-1",
+            [
+              "AMLR 26.3.c"
+            ],
+            "2027-08-01",
+            "2027-08-31",
+            "en_plazo"
+          ],
+          [
+            "EV-FICTICIO-1",
+            [
+              "Ley 7.2"
+            ],
+            "2027-06-01",
+            "2027-07-01",
+            "vencida"
+          ]
+        ],
+        "avisos": [
+          "D-32"
+        ]
+      },
+      "T-4": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2027-07-01",
+          "2027-08-31"
+        ],
+        "decisiones": {
+          "L72": {
+            "pregunta": "¿El art. 7.2 de la Ley se aplica a cualquier cliente o solo a los que ya lo eran cuando entró en vigor?",
+            "respuestas": {
+              "L72-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2027-08-31"
+                ],
+                "depende_de": []
+              },
+              "L72-2": {
+                "estados": [
+                  "en_plazo",
+                  "vencida"
+                ],
+                "fechas": [
+                  "2027-07-01",
+                  "2027-08-31"
+                ],
+                "depende_de": [
+                  "LC (informacion_de_riesgo)"
+                ]
+              }
+            }
+          },
+          "LC (informacion_de_riesgo)": {
+            "pregunta": "¿Un evento «informacion_de_riesgo» es un cambio de las circunstancias del cliente (Ley 7.2)?",
+            "respuestas": {
+              "LC-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2027-08-31"
+                ],
+                "depende_de": []
+              },
+              "LC-2": {
+                "estados": [
+                  "en_plazo",
+                  "vencida"
+                ],
+                "fechas": [
+                  "2027-07-01",
+                  "2027-08-31"
+                ],
+                "depende_de": [
+                  "L72"
+                ]
+              }
+            }
+          }
+        },
+        "eventos": [
+          [
+            "EV-FICTICIO-1",
+            [
+              "AMLR 26.3.c"
+            ],
+            "2027-08-01",
+            "2027-08-31",
+            "en_plazo"
+          ],
+          [
+            "EV-FICTICIO-1",
+            [
+              "Ley 7.2"
+            ],
+            "2027-06-01",
+            "2027-07-01",
+            "vencida"
+          ]
+        ],
+        "avisos": []
+      }
+    }
+  }
+}

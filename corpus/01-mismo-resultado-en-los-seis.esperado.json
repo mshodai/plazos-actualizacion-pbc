@@ -1,0 +1,63 @@
+{
+  "caso": "01-mismo-resultado-en-los-seis",
+  "demuestra": "Cliente nuevo de riesgo alto, con los tres criterios de riesgo a true y un manual de 12 meses, revisado al darse de alta el 2028-02-01. Con el RD, el manual (12 meses, que es el mínimo anual del art. 11.2); con el AMLR, el año del art. 26.2.a. Los seis regímenes dan en_plazo con la misma fecha, el 2029-02-01, y no hay ninguna lectura que decidir: código 0.",
+  "resultado": {
+    "codigo_salida": 0,
+    "regimenes": {
+      "ley_rd": {
+        "estado": "en_plazo",
+        "fechas": [
+          "2029-02-01"
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": []
+      },
+      "amlr": {
+        "estado": "en_plazo",
+        "fechas": [
+          "2029-02-01"
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": []
+      },
+      "T-1": {
+        "estado": "en_plazo",
+        "fechas": [
+          "2029-02-01"
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": []
+      },
+      "T-2": {
+        "estado": "en_plazo",
+        "fechas": [
+          "2029-02-01"
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": []
+      },
+      "T-3": {
+        "estado": "en_plazo",
+        "fechas": [
+          "2029-02-01"
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": []
+      },
+      "T-4": {
+        "estado": "en_plazo",
+        "fechas": [
+          "2029-02-01"
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": []
+      }
+    }
+  }
+}

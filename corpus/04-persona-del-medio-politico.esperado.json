@@ -1,0 +1,184 @@
+{
+  "caso": "04-persona-del-medio-politico",
+  "demuestra": "Persona del medio político, cliente desde el 2028-03-01: la entidad la considera de riesgo superior al promedio con el RD, le aplica medidas de la sección 4 del AMLR (art. 42), pero no la considera de riesgo elevado. A fecha 2029-06-01, con el RD rige el plazo anual y está vencida desde el 2029-03-02. Con el AMLR depende de si el art. 26.2.a exige los dos elementos (PB-1: cinco años, en_plazo) o basta uno (PB-2: un año, vencida) (S-4). T-4, que aplica también el RD, da vencida.",
+  "resultado": {
+    "codigo_salida": 1,
+    "regimenes": {
+      "ley_rd": {
+        "estado": "vencida",
+        "fechas": [
+          "2029-03-01"
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": [
+          "D-14"
+        ]
+      },
+      "amlr": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2029-03-01",
+          "2031-03-01",
+          "2033-03-01"
+        ],
+        "decisiones": {
+          "PB": {
+            "pregunta": "¿El plazo de un año del AMLR (art. 26.2.a) exige riesgo elevado y medidas de la sección 4, o basta uno?",
+            "respuestas": {
+              "PB-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2031-03-01",
+                  "2033-03-01"
+                ],
+                "depende_de": []
+              },
+              "PB-2": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2029-03-01"
+                ],
+                "depende_de": []
+              }
+            }
+          }
+        },
+        "eventos": [],
+        "avisos": [
+          "D-17"
+        ]
+      },
+      "T-1": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2029-03-01",
+          "2031-03-01",
+          "2033-03-01"
+        ],
+        "decisiones": {
+          "PB": {
+            "pregunta": "¿El plazo de un año del AMLR (art. 26.2.a) exige riesgo elevado y medidas de la sección 4, o basta uno?",
+            "respuestas": {
+              "PB-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2031-03-01",
+                  "2033-03-01"
+                ],
+                "depende_de": []
+              },
+              "PB-2": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2029-03-01"
+                ],
+                "depende_de": []
+              }
+            }
+          }
+        },
+        "eventos": [],
+        "avisos": [
+          "D-17"
+        ]
+      },
+      "T-2": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2029-03-01",
+          "2031-03-01",
+          "2033-03-01"
+        ],
+        "decisiones": {
+          "PB": {
+            "pregunta": "¿El plazo de un año del AMLR (art. 26.2.a) exige riesgo elevado y medidas de la sección 4, o basta uno?",
+            "respuestas": {
+              "PB-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2031-03-01",
+                  "2033-03-01"
+                ],
+                "depende_de": []
+              },
+              "PB-2": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2029-03-01"
+                ],
+                "depende_de": []
+              }
+            }
+          }
+        },
+        "eventos": [],
+        "avisos": [
+          "D-17"
+        ]
+      },
+      "T-3": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2029-03-01",
+          "2031-03-01",
+          "2033-03-01"
+        ],
+        "decisiones": {
+          "PB": {
+            "pregunta": "¿El plazo de un año del AMLR (art. 26.2.a) exige riesgo elevado y medidas de la sección 4, o basta uno?",
+            "respuestas": {
+              "PB-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2031-03-01",
+                  "2033-03-01"
+                ],
+                "depende_de": []
+              },
+              "PB-2": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2029-03-01"
+                ],
+                "depende_de": []
+              }
+            }
+          }
+        },
+        "eventos": [],
+        "avisos": [
+          "D-17"
+        ]
+      },
+      "T-4": {
+        "estado": "vencida",
+        "fechas": [
+          "2029-03-01"
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": [
+          "D-14",
+          "D-17"
+        ]
+      }
+    }
+  }
+}

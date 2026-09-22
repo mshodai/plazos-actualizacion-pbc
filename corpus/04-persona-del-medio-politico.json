@@ -1,0 +1,47 @@
+{
+  "version_modelo": 1,
+  "fecha_referencia": "2029-06-01",
+  "sujeto": {
+    "actividad": "otra"
+  },
+  "manual": {
+    "versiones": [
+      {
+        "id": "MANUAL-FICTICIO",
+        "vigente_desde": "2000-01-01",
+        "periodicidades": [
+          {
+            "nivel_entidad": "medio",
+            "meses": 36
+          }
+        ],
+        "plazo_revision_por_evento_dias": null,
+        "revision_anticipada_reinicia_plazo": null
+      }
+    ]
+  },
+  "cliente": {
+    "id": "CLI-FICTICIO-04",
+    "fecha_inicio_relacion": "2028-03-01",
+    "fecha_terminacion_relacion": null,
+    "clasificaciones": [
+      {
+        "fecha": "2028-03-01",
+        "nivel_entidad": "medio",
+        "superior_al_promedio": true,
+        "riesgo_elevado_amlr": false,
+        "medidas_seccion_4_amlr": true
+      }
+    ],
+    "revisiones": [
+      {
+        "id": "REV-FICTICIO-1",
+        "tipo": "inicial",
+        "fecha": "2028-03-01",
+        "resultado": "actualizada",
+        "eventos": []
+      }
+    ],
+    "eventos": []
+  }
+}

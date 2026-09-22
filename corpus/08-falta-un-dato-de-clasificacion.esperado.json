@@ -1,0 +1,201 @@
+{
+  "caso": "08-falta-un-dato-de-clasificacion",
+  "demuestra": "Cliente desde el 2020-01-10 cuya clasificación no dice si su riesgo es superior al promedio (`superior_al_promedio = null`); a fecha 2021-06-01. Con el RD, si lo es, rige el plazo anual y está vencido; si no, los 36 meses del manual. La salida no plantea una lectura de la norma sino un dato que falta: «¿lo es?». Se sale del indeterminado completando la entrada (D-15, D-36). Con SP-1, además, el manual de 36 meses supera el mínimo anual y se recorta a 12, con aviso (D-14). El AMLR no usa ese dato.",
+  "resultado": {
+    "codigo_salida": 1,
+    "regimenes": {
+      "ley_rd": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2021-01-10",
+          "2023-01-10"
+        ],
+        "decisiones": {
+          "SP (2020-01-10)": {
+            "pregunta": "La clasificación del 2020-01-10 no dice si el riesgo es superior al promedio: ¿lo es?",
+            "respuestas": {
+              "SP-1": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2021-01-10"
+                ],
+                "depende_de": []
+              },
+              "SP-2": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2023-01-10"
+                ],
+                "depende_de": []
+              }
+            }
+          }
+        },
+        "eventos": [],
+        "avisos": [
+          "D-14"
+        ]
+      },
+      "amlr": {
+        "estado": "en_plazo",
+        "fechas": [
+          "2023-01-10",
+          "2025-01-10"
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": [
+          "D-24"
+        ]
+      },
+      "T-1": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2021-01-10",
+          "2023-01-10"
+        ],
+        "decisiones": {
+          "SP (2020-01-10)": {
+            "pregunta": "La clasificación del 2020-01-10 no dice si el riesgo es superior al promedio: ¿lo es?",
+            "respuestas": {
+              "SP-1": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2021-01-10"
+                ],
+                "depende_de": []
+              },
+              "SP-2": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2023-01-10"
+                ],
+                "depende_de": []
+              }
+            }
+          }
+        },
+        "eventos": [],
+        "avisos": [
+          "D-14"
+        ]
+      },
+      "T-2": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2021-01-10",
+          "2023-01-10"
+        ],
+        "decisiones": {
+          "SP (2020-01-10)": {
+            "pregunta": "La clasificación del 2020-01-10 no dice si el riesgo es superior al promedio: ¿lo es?",
+            "respuestas": {
+              "SP-1": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2021-01-10"
+                ],
+                "depende_de": []
+              },
+              "SP-2": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2023-01-10"
+                ],
+                "depende_de": []
+              }
+            }
+          }
+        },
+        "eventos": [],
+        "avisos": [
+          "D-14"
+        ]
+      },
+      "T-3": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2021-01-10",
+          "2023-01-10"
+        ],
+        "decisiones": {
+          "SP (2020-01-10)": {
+            "pregunta": "La clasificación del 2020-01-10 no dice si el riesgo es superior al promedio: ¿lo es?",
+            "respuestas": {
+              "SP-1": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2021-01-10"
+                ],
+                "depende_de": []
+              },
+              "SP-2": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2023-01-10"
+                ],
+                "depende_de": []
+              }
+            }
+          }
+        },
+        "eventos": [],
+        "avisos": [
+          "D-14"
+        ]
+      },
+      "T-4": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2021-01-10",
+          "2023-01-10"
+        ],
+        "decisiones": {
+          "SP (2020-01-10)": {
+            "pregunta": "La clasificación del 2020-01-10 no dice si el riesgo es superior al promedio: ¿lo es?",
+            "respuestas": {
+              "SP-1": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2021-01-10"
+                ],
+                "depende_de": []
+              },
+              "SP-2": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2023-01-10"
+                ],
+                "depende_de": []
+              }
+            }
+          }
+        },
+        "eventos": [],
+        "avisos": [
+          "D-14"
+        ]
+      }
+    }
+  }
+}

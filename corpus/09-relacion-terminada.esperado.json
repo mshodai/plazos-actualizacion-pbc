@@ -1,0 +1,81 @@
+{
+  "caso": "09-relacion-terminada",
+  "demuestra": "Cliente de riesgo medio con la relación terminada el 2025-06-01, a fecha 2026-01-01. No hay próxima revisión en ningún régimen: relacion_terminada, sin fecha (D-22). El aviso recuerda que el día de la terminación la revisión ya estaba vencida. Los seis coinciden: código 0.",
+  "resultado": {
+    "codigo_salida": 0,
+    "regimenes": {
+      "ley_rd": {
+        "estado": "relacion_terminada",
+        "fechas": [
+          null
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": [
+          "D-2",
+          "D-22"
+        ]
+      },
+      "amlr": {
+        "estado": "relacion_terminada",
+        "fechas": [
+          null
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": [
+          "D-2",
+          "D-22"
+        ]
+      },
+      "T-1": {
+        "estado": "relacion_terminada",
+        "fechas": [
+          null
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": [
+          "D-2",
+          "D-22"
+        ]
+      },
+      "T-2": {
+        "estado": "relacion_terminada",
+        "fechas": [
+          null
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": [
+          "D-2",
+          "D-22"
+        ]
+      },
+      "T-3": {
+        "estado": "relacion_terminada",
+        "fechas": [
+          null
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": [
+          "D-2",
+          "D-22"
+        ]
+      },
+      "T-4": {
+        "estado": "relacion_terminada",
+        "fechas": [
+          null
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": [
+          "D-2",
+          "D-22"
+        ]
+      }
+    }
+  }
+}

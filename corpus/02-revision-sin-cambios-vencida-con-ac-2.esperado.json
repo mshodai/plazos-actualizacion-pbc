@@ -1,0 +1,188 @@
+{
+  "caso": "02-revision-sin-cambios-vencida-con-ac-2",
+  "demuestra": "Cliente de riesgo alto dado de alta el 2027-09-01, revisado a tiempo el 2028-08-20 sin encontrar cambios, a fecha 2029-01-10. Con el RD la revisión cuenta y vence el 2029-08-20: en_plazo. Con el AMLR depende de AC: si una revisión sin cambios es una «actualización» (AC-1), en_plazo; si no (AC-2), el periodo cuenta desde la inicial y está vencido desde el 2028-09-02, aunque la entidad revisó a tiempo (S-6, §2.3).",
+  "resultado": {
+    "codigo_salida": 1,
+    "regimenes": {
+      "ley_rd": {
+        "estado": "en_plazo",
+        "fechas": [
+          "2029-08-20"
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": []
+      },
+      "amlr": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2028-09-01",
+          "2029-08-20"
+        ],
+        "decisiones": {
+          "AC": {
+            "pregunta": "¿Una revisión sin cambios cuenta como actualización para el AMLR?",
+            "respuestas": {
+              "AC-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2029-08-20"
+                ],
+                "depende_de": []
+              },
+              "AC-2": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2028-09-01"
+                ],
+                "depende_de": []
+              }
+            }
+          }
+        },
+        "eventos": [],
+        "avisos": []
+      },
+      "T-1": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2028-09-01",
+          "2029-08-20"
+        ],
+        "decisiones": {
+          "AC": {
+            "pregunta": "¿Una revisión sin cambios cuenta como actualización para el AMLR?",
+            "respuestas": {
+              "AC-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2029-08-20"
+                ],
+                "depende_de": []
+              },
+              "AC-2": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2028-09-01"
+                ],
+                "depende_de": []
+              }
+            }
+          }
+        },
+        "eventos": [],
+        "avisos": []
+      },
+      "T-2": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2028-09-01",
+          "2029-08-20"
+        ],
+        "decisiones": {
+          "AC": {
+            "pregunta": "¿Una revisión sin cambios cuenta como actualización para el AMLR?",
+            "respuestas": {
+              "AC-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2029-08-20"
+                ],
+                "depende_de": []
+              },
+              "AC-2": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2028-09-01"
+                ],
+                "depende_de": []
+              }
+            }
+          }
+        },
+        "eventos": [],
+        "avisos": []
+      },
+      "T-3": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2028-09-01",
+          "2029-08-20"
+        ],
+        "decisiones": {
+          "AC": {
+            "pregunta": "¿Una revisión sin cambios cuenta como actualización para el AMLR?",
+            "respuestas": {
+              "AC-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2029-08-20"
+                ],
+                "depende_de": []
+              },
+              "AC-2": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2028-09-01"
+                ],
+                "depende_de": []
+              }
+            }
+          }
+        },
+        "eventos": [],
+        "avisos": []
+      },
+      "T-4": {
+        "estado": "indeterminado",
+        "fechas": [
+          "2028-09-01",
+          "2029-08-20"
+        ],
+        "decisiones": {
+          "AC": {
+            "pregunta": "¿Una revisión sin cambios cuenta como actualización para el AMLR?",
+            "respuestas": {
+              "AC-1": {
+                "estados": [
+                  "en_plazo"
+                ],
+                "fechas": [
+                  "2029-08-20"
+                ],
+                "depende_de": []
+              },
+              "AC-2": {
+                "estados": [
+                  "vencida"
+                ],
+                "fechas": [
+                  "2028-09-01"
+                ],
+                "depende_de": []
+              }
+            }
+          }
+        },
+        "eventos": [],
+        "avisos": []
+      }
+    }
+  }
+}
