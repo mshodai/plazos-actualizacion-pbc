@@ -1,0 +1,65 @@
+{
+  "caso": "10-vencida-en-los-seis",
+  "demuestra": "Cliente de riesgo medio desde el 2020-03-02, con un manual de 36 meses y revisado solo al darse de alta; a fecha 2028-01-15. Con el RD venció el 2023-03-02; con el AMLR, el 2025-03-02 (PM-1) o el 2023-03-02 (PM-2). Los seis regímenes dan vencida: coinciden en el estado, pero hay que revisar al cliente. Código 1, porque alguna lectura exige actuar (D-41); con el criterio anterior, retirado (D-38), daba 0.",
+  "resultado": {
+    "codigo_salida": 1,
+    "regimenes": {
+      "ley_rd": {
+        "estado": "vencida",
+        "fechas": [
+          "2023-03-02"
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": []
+      },
+      "amlr": {
+        "estado": "vencida",
+        "fechas": [
+          "2023-03-02",
+          "2025-03-02"
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": []
+      },
+      "T-1": {
+        "estado": "vencida",
+        "fechas": [
+          "2023-03-02"
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": []
+      },
+      "T-2": {
+        "estado": "vencida",
+        "fechas": [
+          "2023-03-02",
+          "2025-03-02"
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": []
+      },
+      "T-3": {
+        "estado": "vencida",
+        "fechas": [
+          "2023-03-02"
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": []
+      },
+      "T-4": {
+        "estado": "vencida",
+        "fechas": [
+          "2023-03-02"
+        ],
+        "decisiones": {},
+        "eventos": [],
+        "avisos": []
+      }
+    }
+  }
+}

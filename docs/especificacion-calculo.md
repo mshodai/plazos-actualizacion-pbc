@@ -716,17 +716,20 @@ La alternativa, dar solo los estados de cada lectura, no distinguía una respues
 
 | Código | Cuándo |
 |---|---|
-| 0 | La entrada es válida y, en la fecha de referencia, los seis regímenes dan el mismo estado y ninguno es `indeterminado`. |
-| 1 | La entrada es válida y los regímenes dan estados distintos, o alguno es `indeterminado`. |
+| 0 | La entrada es válida y, en la fecha de referencia, ninguna lectura de ningún régimen exige actuar: todas dan `en_plazo` o `relacion_terminada`. Aunque los regímenes discrepen. |
+| 1 | La entrada es válida y alguna lectura de algún régimen exige actuar: da `vencida`, `revision_pendiente_sin_plazo` o `sin_plazo`. |
 | 2 | El fichero no existe, no se puede leer o no está en UTF-8; la entrada no es válida (modelo, §9); o la orden se usa mal. |
 
 Con una entrada no válida también se emite el informe, que lista los errores con su código y su ruta, en texto o en JSON. Los errores de lectura del fichero y de uso van a la salida de error.
 
-**[D-38]** El código solo mira el estado, como en `plazos-conservacion-pbc`:
-- Un `indeterminado` da 1 aunque los seis regímenes coincidan, porque el estado depende de una lectura que la norma no resuelve.
-- Seis regímenes con el mismo estado y fechas distintas dan 0. El informe sí señala la diferencia de fechas ([D-40]).
+**[D-41] El código 1 señala que alguna lectura exige actuar.** Exigen actuar tres estados de §1.4: `vencida` (hay que revisar), `revision_pendiente_sin_plazo` (hay que revisar, aunque no haya plazo) y `sin_plazo` (el manual tiene que fijar la periodicidad que el RD, art. 11.2, deja a su cargo). `en_plazo` y `relacion_terminada` no exigen nada. El código mira las lecturas de cada régimen, no su estado agregado:
+- Un cliente `vencida` en los seis regímenes da 1, aunque las normas coincidan (corpus, caso 10).
+- Un `indeterminado` da 1 cuando alguna de sus lecturas exige actuar, que con estos estados es siempre: `relacion_terminada` no depende de ninguna lectura, así que un `indeterminado` mezcla siempre `en_plazo` con un estado que exige actuar.
+- Seis regímenes en `en_plazo` con fechas distintas dan 0.
 
-La alternativa, dar 1 también por fechas distintas, daría 1 casi siempre: basta un manual más corto que el máximo del AMLR (PM) para que las fechas difieran sin que cambie el estado. El código perdería su uso, que es avisar de que el estado en la fecha de referencia no está claro.
+La discrepancia entre regímenes, en el estado o en las fechas, no cambia el código: sigue en el informe ([D-28], [D-40]). El código responde a si hay que hacer algo con el cliente con alguna norma y alguna lectura. Es el mismo criterio que `registro-examen-especial-pbc` (D-25), aplicado a estos estados. El informe en JSON lo da en `exige_actuar`.
+
+**[D-38, retirada]** Era: el código solo mira si los estados coinciden; estados distintos o un `indeterminado` dan 1, y seis regímenes con el mismo estado dan 0. Sustituida por [D-41]: con D-38, un cliente vencido en los seis regímenes daba 0, como uno en plazo.
 
 ---
 
@@ -771,6 +774,7 @@ La alternativa, dar 1 también por fechas distintas, daría 1 casi siempre: bast
 | D-35 | En texto, un régimen con el mismo resultado que otro ya mostrado se remite a él; el JSON da los seis completos. | §10.1 |
 | D-36 | Cada `indeterminado` se presenta como decisiones: la pregunta de cada dimensión atribuida y, por respuesta, estados, fechas y si resuelve o de qué dimensiones sigue dependiendo. | §10.2 |
 | D-37 | Los componentes se dan una vez cada uno, con el número de combinaciones de lecturas en que aparecen. | §10.1 |
-| D-38 | El código de salida solo mira el estado: `indeterminado` da 1; fechas distintas con el mismo estado dan 0. | §10.3 |
+| D-38 | *Retirada.* Era: el código de salida solo mira si los estados coinciden: `indeterminado` o estados distintos dan 1; el mismo estado en los seis da 0. Sustituida por D-41. | §10.3 |
 | D-39 | En texto, más de tres fechas posibles se resumen como intervalo; el JSON las da todas. | §10.1 |
 | D-40 | Dos regímenes coinciden si dan el mismo estado y las mismas fechas. | §10.1 |
+| D-41 | El código 1 señala que alguna lectura exige actuar (`vencida`, `revision_pendiente_sin_plazo` o `sin_plazo`); el 0, que ninguna lo exige, aunque los regímenes discrepen. | §10.3 |

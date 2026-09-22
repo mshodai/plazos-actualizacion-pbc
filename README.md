@@ -13,7 +13,7 @@ Esta herramienta no da una fecha. Calcula la próxima revisión en seis regímen
 
 ## El caso, calculado
 
-El repositorio incluye un corpus de nueve clientes sintéticos en `corpus/`, cada uno con su resultado esperado. El del escenario es el caso 07:
+El repositorio incluye un corpus de diez clientes sintéticos en `corpus/`, cada uno con su resultado esperado. El del escenario es el caso 07:
 
 ```
 $ plazos-actualizacion corpus/07-revision-de-2027-que-ninguna-norma-cuenta.json
@@ -110,7 +110,7 @@ Cómo leerlo:
 - **Componentes.** De dónde sale cada fecha: la norma, el ancla del periodo, los meses y en cuántas combinaciones de lecturas aparece.
 - **Avisos.** Aquí, que una revisión posterior al 10 de julio de 2027 cuenta con una norma y no con la otra (D-33).
 
-El código de salida es 1, porque los regímenes no coinciden y hay `indeterminado`.
+El código de salida es 1, porque alguna lectura exige actuar: con AC-2 y TR-1, el cliente está vencido.
 
 ## Instalación
 
@@ -126,8 +126,8 @@ plazos-actualizacion corpus/07-revision-de-2027-que-ninguna-norma-cuenta.json
 **Uso:** `plazos-actualizacion FICHERO [--json]`. Con `--json`, el mismo informe en JSON, con todas las fechas, todas las combinaciones de lecturas y las fechas en formato `AAAA-MM-DD`. En texto, más de tres fechas posibles se resumen como intervalo.
 
 **Códigos de salida:**
-- **0:** en la fecha de referencia, los seis regímenes dan el mismo estado y ninguno es `indeterminado`. Las fechas pueden diferir: el informe lo dice, el código no. En el corpus pasa en los casos 01 y 09.
-- **1:** los regímenes dan estados distintos, o alguno es `indeterminado`.
+- **1:** en la fecha de referencia, alguna lectura de algún régimen exige actuar: da `vencida`, `revision_pendiente_sin_plazo` o `sin_plazo`. También si los seis regímenes coinciden: un cliente vencido en los seis da 1 (caso 10 del corpus).
+- **0:** ninguna lectura lo exige, aunque los regímenes discrepen. La discrepancia, en el estado o en las fechas, está en el informe. En el corpus pasa en los casos 01 y 09.
 - **2:** el fichero no se puede leer o la entrada no es válida. Los errores de validación salen con su código (`ERR-01` a `ERR-08`) y la ruta del dato.
 
 **Con tu propio cliente.** La entrada es un JSON con:
@@ -138,7 +138,7 @@ plazos-actualizacion corpus/07-revision-de-2027-que-ninguna-norma-cuenta.json
 
 El formato, con un ejemplo, está en [docs/modelo-datos.md](docs/modelo-datos.md). La entrada recoge hechos, no el régimen: el régimen es un parámetro del cálculo.
 
-**El corpus.** Los nueve casos, con su tabla de estados, están en [corpus/README.md](corpus/README.md). Se regeneran con `python corpus/generar.py`, que comprueba cada caso contra su resultado esperado antes de escribirlo. Los resultados esperados están escritos a mano desde la especificación.
+**El corpus.** Los diez casos, con su tabla de estados, están en [corpus/README.md](corpus/README.md). Se regeneran con `python corpus/generar.py`, que comprueba cada caso contra su resultado esperado antes de escribirlo. Los resultados esperados están escritos a mano desde la especificación.
 
 **Tests:** `pip install pytest` y `pytest` desde la raíz.
 

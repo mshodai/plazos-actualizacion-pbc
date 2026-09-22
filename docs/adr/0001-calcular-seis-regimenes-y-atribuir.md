@@ -58,7 +58,7 @@ Esperar a las directrices finales dejaría sin herramienta los meses en que las 
 
 Quien solo quiere una fecha tiene que responder antes esas preguntas. Es el precio de no responderlas en silencio.
 
-**`indeterminado` es frecuente.** En el corpus, siete de nueve casos dan código 1. No es un defecto del cálculo: es la cantidad de preguntas que la norma deja abiertas. El código de salida solo mira el estado (D-38), así que no avisa cuando dos regímenes dan el mismo estado con fechas distintas; eso lo dice el informe (D-40).
+**`indeterminado` es frecuente.** En el corpus original, siete de nueve casos tienen algún régimen `indeterminado`. No es un defecto del cálculo: es la cantidad de preguntas que la norma deja abiertas. El código de salida ya no mira si los regímenes coinciden, sino si alguna lectura exige actuar (D-41, que sustituye a D-38); la discrepancia entre regímenes la dice el informe (D-28, D-40).
 
 **Hay que mantener el repositorio cuando cambie el borrador.** Cuando se publiquen las directrices finales hará falta:
 

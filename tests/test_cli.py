@@ -60,10 +60,26 @@ def fichero(tmp_path):
     return escribir
 
 
-def test_codigo_0_si_los_seis_coinciden(fichero, capsys):
-    # Ejemplo 1 después de A: vencida en los seis. D-38: las fechas distintas no cuentan.
-    assert main([fichero(_datos("2028-01-15", CLASIFICACION, INICIAL))]) == 0
-    assert "vencida" in capsys.readouterr().out
+def test_codigo_1_si_vencida_en_los_seis(fichero, capsys):
+    # Ejemplo 1 después de A: vencida en los seis. D-41: los regímenes coinciden, pero hay que
+    # revisar al cliente. Con D-38, retirada, daba 0.
+    assert main([fichero(_datos("2028-01-15", CLASIFICACION, INICIAL))]) == 1
+    assert "Mismo estado en los seis (vencida)" in capsys.readouterr().out
+
+
+def test_codigo_0_si_ninguna_lectura_exige_actuar_aunque_difieran(fichero, capsys):
+    # Ejemplo 1 antes de A: en_plazo en los seis, con fechas distintas entre ley_rd y amlr
+    # (2023-03-02 frente a 2023-03-02 o 2025-03-02 según PM). D-41: la discrepancia está en el
+    # informe, no en el código.
+    assert main([fichero(_datos("2022-06-01", CLASIFICACION, INICIAL))]) == 0
+    assert "ley_rd y amlr no coinciden" in capsys.readouterr().out
+
+
+def test_codigo_1_con_sin_plazo(fichero, capsys):
+    # D-16: el manual no fija periodicidad para el nivel del cliente; con el RD, sin_plazo.
+    # D-41: sin_plazo exige actuar.
+    assert main([fichero(_datos("2022-06-01", CLASIFICACION, INICIAL, periodicidades={"alto": 12}))]) == 1
+    assert "sin_plazo" in capsys.readouterr().out
 
 
 def test_codigo_1_si_difieren(fichero, capsys):
@@ -83,16 +99,17 @@ def test_codigo_1_si_difieren(fichero, capsys):
 
 
 def test_codigo_1_con_indeterminado_aunque_coincidan(fichero, capsys):
-    # D-38: antes de A, los T-n son ley_rd; aquí todos indeterminado por SP.
+    # Antes de A, los T-n son ley_rd; aquí todos indeterminado por SP, y SP-1 da vencida (D-41).
     clasificaciones = [{**CLASIFICACION[0], "superior_al_promedio": None}]
     assert main([fichero(_datos("2021-06-01", clasificaciones, INICIAL))]) == 1
     assert "Qué hay que decidir" in capsys.readouterr().out
 
 
 def test_json(fichero, capsys):
-    assert main([fichero(_datos("2028-01-15", CLASIFICACION, INICIAL)), "--json"]) == 0
+    assert main([fichero(_datos("2022-06-01", CLASIFICACION, INICIAL)), "--json"]) == 0
     datos = json.loads(capsys.readouterr().out)
     assert datos["valida"] is True
+    assert datos["exige_actuar"] is False
     assert set(datos["regimenes"]) == {"ley_rd", "amlr", "T-1", "T-2", "T-3", "T-4"}
 
 
@@ -144,7 +161,7 @@ def test_ayuda(capsys):
 def test_como_modulo(fichero):
     # La orden declarada en pyproject.toml apunta a actualizacion.cli:main.
     resultado = subprocess.run(
-        [sys.executable, "-m", "actualizacion.cli", fichero(_datos("2028-01-15", CLASIFICACION, INICIAL))],
+        [sys.executable, "-m", "actualizacion.cli", fichero(_datos("2022-06-01", CLASIFICACION, INICIAL))],
         capture_output=True,
         text=True,
         env={"PYTHONPATH": "src"},

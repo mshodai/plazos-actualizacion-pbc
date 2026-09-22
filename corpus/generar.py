@@ -473,7 +473,35 @@ def _caso_09():
     )
 
 
-CASOS = [_caso_01(), _caso_02(), _caso_03(), _caso_04(), _caso_05(), _caso_06(), _caso_07(), _caso_08(), _caso_09()]
+def _caso_10():
+    # Ejemplo 1 de la especificación con R = 2028-01-15. Cliente existente de riesgo medio desde el
+    # 2020-03-02, revisado solo al darse de alta, manual de 36 meses.
+    # RD: 2020-03-02 + 36 = 2023-03-02. AMLR: PM-1, 60 meses: 2025-03-02; PM-2, 36: 2023-03-02.
+    # PM no cambia el estado: vencida con las dos, sin decisión.
+    # T-1: el periodo en curso el día A es el del RD, ya vencido: 2023-03-02. T-2: amlr.
+    # T-3: el primero entre el RD (2023-03-02) y A + P (2032 o 2030): 2023-03-02 (D-26).
+    # T-4: la más temprana entre ley_rd y amlr: 2023-03-02.
+    # D-41: vencida en los seis, los regímenes coinciden en el estado y hay que revisar: código 1.
+    rd = reg(VENCIDA, ["2023-03-02"])
+    amlr = reg(VENCIDA, ["2023-03-02", "2025-03-02"])
+    return Caso(
+        "10-vencida-en-los-seis",
+        "Cliente de riesgo medio desde el 2020-03-02, con un manual de 36 meses y revisado solo al darse de alta; "
+        "a fecha 2028-01-15. Con el RD venció el 2023-03-02; con el AMLR, el 2025-03-02 (PM-1) o el 2023-03-02 "
+        "(PM-2). Los seis regímenes dan vencida: coinciden en el estado, pero hay que revisar al cliente. Código 1, "
+        "porque alguna lectura exige actuar (D-41); con el criterio anterior, retirado (D-38), daba 0.",
+        cliente(10, "2028-01-15", "2020-03-02",
+                [clasificacion("2020-03-02", "medio", False, False, False)],
+                [revision(1, "inicial", "2020-03-02")],
+                {"medio": 36}),
+        resultado(1, [rd, amlr, rd, amlr, rd, rd]),
+    )
+
+
+CASOS = [
+    _caso_01(), _caso_02(), _caso_03(), _caso_04(), _caso_05(), _caso_06(), _caso_07(), _caso_08(), _caso_09(),
+    _caso_10(),
+]
 
 
 # --- Autoverificación y escritura ------------------------------------------------------
@@ -522,7 +550,8 @@ def readme():
         "(con el estado y las fechas de cada respuesta y de qué depende aún), los eventos pendientes con sus "
         "bases y los códigos D-n de los avisos. Los resultados esperados están escritos a mano en `generar.py` a "
         "partir de `docs/especificacion-calculo.md`. El código de salida es el de `plazos-actualizacion` (§10.3): "
-        "0 si los seis regímenes dan el mismo estado y ninguno es `indeterminado`; 1 si no.",
+        "1 si alguna lectura de algún régimen exige actuar (`vencida`, `revision_pendiente_sin_plazo` o `sin_plazo`); "
+        "0 si ninguna lo exige, aunque los regímenes discrepen (D-41).",
         "",
         "| Caso | Referencia | " + " | ".join(REGIMENES) + " | Código |",
         "|---|---|" + "---|" * len(REGIMENES) + "---|",

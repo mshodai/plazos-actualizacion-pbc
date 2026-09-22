@@ -24,8 +24,11 @@ from actualizacion.calculo import (
     AMLR,
     INDETERMINADO,
     LEY_RD,
+    PENDIENTE_SIN_PLAZO,
     REGIMENES,
+    SIN_PLAZO,
     TRANSICION,
+    VENCIDA,
     EventoPendiente,
     Lectura,
     Periodico,
@@ -157,6 +160,10 @@ def descripcion(lectura: str) -> str:
 # --- Estructuras del informe ------------------------------------------------------
 
 
+# D-41: los estados que exigen hacer algo con el cliente.
+ESTADOS_QUE_EXIGEN_ACTUAR = frozenset({VENCIDA, PENDIENTE_SIN_PLAZO, SIN_PLAZO})
+
+
 @dataclass(frozen=True)
 class RespuestaLectura:
     """Qué pasa si se responde con esta lectura (D-36).
@@ -251,6 +258,15 @@ class Informe:
     @property
     def hay_indeterminado(self) -> bool:
         return INDETERMINADO in self.estados.values()
+
+    @property
+    def exige_actuar(self) -> bool:
+        """D-41: alguna lectura de algún régimen da un estado que exige actuar."""
+        return any(
+            lectura.estado in ESTADOS_QUE_EXIGEN_ACTUAR
+            for r in self.regimenes
+            for lectura in r.resultado.lecturas
+        )
 
     @property
     def grupos(self) -> dict[str, tuple[str, ...]]:
@@ -404,10 +420,12 @@ def como_dict(inf: Informe) -> dict:
         "cliente": inf.cliente_id,
         "fecha_referencia": _fecha(inf.fecha_referencia),
         "fecha_aplicacion_amlr": _fecha(inf.fecha_aplicacion_amlr),
+        "exige_actuar": None,
         "comparacion": None,
         "regimenes": {},
     }
     if inf.valida:
+        datos["exige_actuar"] = inf.exige_actuar
         datos["comparacion"] = {
             "estados_distintos": inf.estados_distintos,
             "fechas_distintas": inf.fechas_distintas,

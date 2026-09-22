@@ -6,7 +6,7 @@ Clientes sintéticos con su resultado esperado. Lo genera `corpus/generar.py`, q
 python corpus/generar.py
 ```
 
-Cada caso tiene la entrada (`NN-nombre.json`, según `docs/modelo-datos.md`) y el resultado esperado (`NN-nombre.esperado.json`): en cada uno de los seis regímenes, el estado y las fechas de la próxima revisión en la fecha de referencia, las decisiones que hay que tomar para salir de cada `indeterminado` (con el estado y las fechas de cada respuesta y de qué depende aún), los eventos pendientes con sus bases y los códigos D-n de los avisos. Los resultados esperados están escritos a mano en `generar.py` a partir de `docs/especificacion-calculo.md`. El código de salida es el de `plazos-actualizacion` (§10.3): 0 si los seis regímenes dan el mismo estado y ninguno es `indeterminado`; 1 si no.
+Cada caso tiene la entrada (`NN-nombre.json`, según `docs/modelo-datos.md`) y el resultado esperado (`NN-nombre.esperado.json`): en cada uno de los seis regímenes, el estado y las fechas de la próxima revisión en la fecha de referencia, las decisiones que hay que tomar para salir de cada `indeterminado` (con el estado y las fechas de cada respuesta y de qué depende aún), los eventos pendientes con sus bases y los códigos D-n de los avisos. Los resultados esperados están escritos a mano en `generar.py` a partir de `docs/especificacion-calculo.md`. El código de salida es el de `plazos-actualizacion` (§10.3): 1 si alguna lectura de algún régimen exige actuar (`vencida`, `revision_pendiente_sin_plazo` o `sin_plazo`); 0 si ninguna lo exige, aunque los regímenes discrepen (D-41).
 
 | Caso | Referencia | ley_rd | amlr | T-1 | T-2 | T-3 | T-4 | Código |
 |---|---|---|---|---|---|---|---|---|
@@ -19,6 +19,7 @@ Cada caso tiene la entrada (`NN-nombre.json`, según `docs/modelo-datos.md`) y e
 | 07-revision-de-2027-que-ninguna-norma-cuenta | 2028-03-01 | en_plazo | indeterminado | indeterminado | indeterminado | indeterminado | indeterminado | 1 |
 | 08-falta-un-dato-de-clasificacion | 2021-06-01 | indeterminado | en_plazo | indeterminado | indeterminado | indeterminado | indeterminado | 1 |
 | 09-relacion-terminada | 2026-01-01 | relacion_terminada | relacion_terminada | relacion_terminada | relacion_terminada | relacion_terminada | relacion_terminada | 0 |
+| 10-vencida-en-los-seis | 2028-01-15 | vencida | vencida | vencida | vencida | vencida | vencida | 1 |
 
 ## Qué demuestra cada caso
 
@@ -39,3 +40,5 @@ Cada caso tiene la entrada (`NN-nombre.json`, según `docs/modelo-datos.md`) y e
 **08-falta-un-dato-de-clasificacion.** Cliente desde el 2020-01-10 cuya clasificación no dice si su riesgo es superior al promedio (`superior_al_promedio = null`); a fecha 2021-06-01. Con el RD, si lo es, rige el plazo anual y está vencido; si no, los 36 meses del manual. La salida no plantea una lectura de la norma sino un dato que falta: «¿lo es?». Se sale del indeterminado completando la entrada (D-15, D-36). Con SP-1, además, el manual de 36 meses supera el mínimo anual y se recorta a 12, con aviso (D-14). El AMLR no usa ese dato.
 
 **09-relacion-terminada.** Cliente de riesgo medio con la relación terminada el 2025-06-01, a fecha 2026-01-01. No hay próxima revisión en ningún régimen: relacion_terminada, sin fecha (D-22). El aviso recuerda que el día de la terminación la revisión ya estaba vencida. Los seis coinciden: código 0.
+
+**10-vencida-en-los-seis.** Cliente de riesgo medio desde el 2020-03-02, con un manual de 36 meses y revisado solo al darse de alta; a fecha 2028-01-15. Con el RD venció el 2023-03-02; con el AMLR, el 2025-03-02 (PM-1) o el 2023-03-02 (PM-2). Los seis regímenes dan vencida: coinciden en el estado, pero hay que revisar al cliente. Código 1, porque alguna lectura exige actuar (D-41); con el criterio anterior, retirado (D-38), daba 0.

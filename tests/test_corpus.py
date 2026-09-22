@@ -40,7 +40,7 @@ def _caso(sufijo):
 
 def test_estan_todos_los_casos():
     assert IDS == [c.nombre for c in G.CASOS]
-    assert len(ESPERADOS) == 9
+    assert len(ESPERADOS) == 10
 
 
 @pytest.mark.parametrize("esperado", ESPERADOS, ids=IDS)
@@ -149,6 +149,10 @@ def test_estan_los_casos_pedidos():
 
     # Relación terminada.
     assert set(estados("relacion-terminada").values()) == {"relacion_terminada"}
+
+    # Vencida en los seis: los regímenes coinciden, pero hay que revisar. Código 1 (D-41).
+    assert set(estados("vencida-en-los-seis").values()) == {"vencida"}
+    assert _caso("vencida-en-los-seis").esperado["codigo_salida"] == 1
 
 
 def test_los_datos_son_sinteticos():

@@ -7,9 +7,11 @@ from actualizacion.carga import cargar_fichero
 from actualizacion.salida import como_json, informe, texto
 
 EPILOG = (
-    "códigos de salida: 0 si, en la fecha de referencia, los seis regímenes (ley_rd, amlr, "
-    "T-1 a T-4) dan el mismo estado y ninguno es «indeterminado»; 1 si difieren o alguno es "
-    "«indeterminado»; 2 si el fichero no se puede leer o la entrada no es válida."
+    "códigos de salida: 1 si, en la fecha de referencia, alguna lectura de alguno de los seis "
+    "regímenes (ley_rd, amlr, T-1 a T-4) exige actuar, es decir, da «vencida», "
+    "«revision_pendiente_sin_plazo» o «sin_plazo»; 0 si ninguna lo exige, aunque los regímenes "
+    "discrepen (la discrepancia está en el informe); 2 si el fichero no se puede leer o la entrada "
+    "no es válida."
 )
 
 
@@ -62,10 +64,8 @@ def codigo_de_salida(inf) -> int:
     """§10.3."""
     if not inf.valida:
         return 2
-    # D-38: solo cuenta el estado; un `indeterminado` da 1 aunque los seis coincidan.
-    if inf.estados_distintos or inf.hay_indeterminado:
-        return 1
-    return 0
+    # D-41: 1 si alguna lectura exige actuar; la discrepancia entre regímenes no cuenta.
+    return 1 if inf.exige_actuar else 0
 
 
 def _error(parser, mensaje):
