@@ -669,17 +669,64 @@ Es el caso en que las cuatro lecturas de la transición se separan:
 
 ## 10. Salida
 
-La forma del resultado está en §1.5. La línea de órdenes y los códigos de salida se fijarán con la implementación.
+La línea de órdenes es `plazos-actualizacion FICHERO [--json]`. Lee la entrada, la valida, calcula los seis regímenes y emite un informe en texto o, con `--json`, en JSON. El contenido es el mismo en los dos formatos, salvo los resúmenes del texto ([D-35], [D-39]).
 
-Para cada cliente, el resultado da:
+El informe empieza con la advertencia de que es un cálculo bajo las lecturas que declara esta especificación, no una determinación jurídica.
 
-- el estado y la fecha de la próxima revisión obligatoria en los seis regímenes;
-- dónde difieren: `ley_rd` frente a `amlr`, y T-1 a T-4 entre sí ([D-28]);
-- las lecturas de cada régimen con sus fechas y citas;
-- los componentes periódico y por evento;
-- los avisos.
+### 10.1. Contenido
 
-Lleva la misma advertencia que en `plazos-conservacion-pbc`: es un cálculo bajo las lecturas que declara esta especificación, no una determinación jurídica.
+Para el cliente, en la fecha de referencia:
+
+1. **La próxima revisión y el estado en los seis regímenes.** Es el producto. Si las lecturas de un régimen dan fechas distintas, se dan todas ([D-5]).
+2. **Dónde difieren**:
+   - si `ley_rd` y `amlr` no coinciden;
+   - si T-1 a T-4 no coinciden, que significa que el resultado depende de cómo se resuelva la transición (S-2);
+   - qué regímenes dan cada estado.
+
+   **[D-40]** Dos regímenes coinciden si dan el mismo estado **y** las mismas fechas. D-28 no decía si contaban las fechas. Cuentan, porque la fecha es el producto: dos regímenes `en_plazo` con vencimientos distintos no dicen lo mismo. Si todos los estados coinciden pero las fechas no, el informe lo dice expresamente.
+3. **Qué hay que decidir para salir de cada `indeterminado`** (§10.2).
+4. **Los componentes de cada régimen**: el periódico y los eventos pendientes, con sus bases, su activación, su fecha límite y su estado.
+
+   **[D-37]** Se da cada componente distinto una vez, con el número de combinaciones de lecturas en que aparece. Los componentes que empatan ([D-34]) aparecen todos. La alternativa, dar los componentes de cada combinación, repetiría el mismo componente tantas veces como combinaciones, y el JSON ya las da todas en `lecturas`.
+5. **Los avisos**, cada uno con los regímenes que lo dan.
+
+**[D-35]** En texto, un régimen con el mismo resultado que otro ya mostrado no se repite: se remite a él («lo mismo que amlr»). Es frecuente: T-n es `ley_rd` antes de A, y T-2 suele ser `amlr`. El JSON da siempre los seis completos.
+
+**[D-39]** En texto, cuando un régimen o una lectura tienen más de tres fechas posibles, se resumen como intervalo: «entre el 2019-11-10 y el 2030-02-14 (10 fechas posibles)». El JSON las da todas. Con muchas lecturas, la lista completa hacía ilegible la tabla del producto.
+
+### 10.2. Salir del `indeterminado`
+
+**[D-36]** Cada `indeterminado` se presenta como las decisiones que hay que tomar para salir de él. Hay una decisión por cada dimensión que lo causa ([D-30]), y cada una da:
+
+- **la pregunta** que resuelve, en términos de la entrada o de la norma, con su referencia (S-n, D-n o sección). Por ejemplo: «¿Una revisión hecha antes de tiempo reinicia el plazo de la siguiente? (S-3, §2.2)». Algunas preguntas no son de interpretación sino de un dato que falta (SP, `riesgo_elevado_amlr desconocido`). Para esas, la salida de un `indeterminado` es completar la entrada;
+- **para cada respuesta posible** (cada lectura):
+  - los estados y las fechas que da;
+  - **si con ella el estado queda resuelto** o, si no, de qué otras dimensiones sigue dependiendo.
+
+  Se calculan sobre las combinaciones compatibles con esa lectura: las que la fijan y las que no consultan la dimensión, que valen con cualquier lectura. Las dimensiones de las que sigue dependiendo son las que resultan de aplicar [D-30] solo a esas combinaciones;
+- **los datos de la entrada** que ponen la dimensión en juego ([D-30]).
+
+Así, quien lea el informe sabe qué pregunta tiene que responder, qué pasa con cada respuesta, y si con una sola respuesta basta o hace falta responder también otra. En el ejemplo 6:
+- con RA-1, el estado queda resuelto (`en_plazo`);
+- con RA-2, «aún depende de IP».
+
+La alternativa, dar solo los estados de cada lectura, no distinguía una respuesta que resuelve de una que deja el `indeterminado` abierto.
+
+### 10.3. Códigos de salida
+
+| Código | Cuándo |
+|---|---|
+| 0 | La entrada es válida y, en la fecha de referencia, los seis regímenes dan el mismo estado y ninguno es `indeterminado`. |
+| 1 | La entrada es válida y los regímenes dan estados distintos, o alguno es `indeterminado`. |
+| 2 | El fichero no existe, no se puede leer o no está en UTF-8; la entrada no es válida (modelo, §9); o la orden se usa mal. |
+
+Con una entrada no válida también se emite el informe, que lista los errores con su código y su ruta, en texto o en JSON. Los errores de lectura del fichero y de uso van a la salida de error.
+
+**[D-38]** El código solo mira el estado, como en `plazos-conservacion-pbc`:
+- Un `indeterminado` da 1 aunque los seis regímenes coincidan, porque el estado depende de una lectura que la norma no resuelve.
+- Seis regímenes con el mismo estado y fechas distintas dan 0. El informe sí señala la diferencia de fechas ([D-40]).
+
+La alternativa, dar 1 también por fechas distintas, daría 1 casi siempre: basta un manual más corto que el máximo del AMLR (PM) para que las fechas difieran sin que cambie el estado. El código perdería su uso, que es avisar de que el estado en la fecha de referencia no está claro.
 
 ---
 
@@ -721,3 +768,9 @@ Lleva la misma advertencia que en `plazos-conservacion-pbc`: es un cálculo bajo
 | D-32 | En T-1 a T-3, un evento que el RD activa antes de A y el AMLR en A o después no se resuelve a favor del RD: lecturas TD-1 (RD) y TD-2 (AMLR), con aviso. | §5.2 |
 | D-33 | En T-1 y T-3, si una revisión posterior a A cierra el periodo del RD lo decide el AMLR (TR-1) o el RD (TR-2); con aviso si difieren. | §5.2 |
 | D-34 | Los empates se informan todos: los componentes periódicos de T-3 y T-4 con la misma fecha límite, y los supuestos que activan un evento el mismo día. | §1.4 |
+| D-35 | En texto, un régimen con el mismo resultado que otro ya mostrado se remite a él; el JSON da los seis completos. | §10.1 |
+| D-36 | Cada `indeterminado` se presenta como decisiones: la pregunta de cada dimensión atribuida y, por respuesta, estados, fechas y si resuelve o de qué dimensiones sigue dependiendo. | §10.2 |
+| D-37 | Los componentes se dan una vez cada uno, con el número de combinaciones de lecturas en que aparecen. | §10.1 |
+| D-38 | El código de salida solo mira el estado: `indeterminado` da 1; fechas distintas con el mismo estado dan 0. | §10.3 |
+| D-39 | En texto, más de tres fechas posibles se resumen como intervalo; el JSON las da todas. | §10.1 |
+| D-40 | Dos regímenes coinciden si dan el mismo estado y las mismas fechas. | §10.1 |
