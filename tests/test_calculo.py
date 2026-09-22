@@ -319,3 +319,44 @@ def test_evento_que_las_dos_normas_activan_en_su_periodo():
         assert all("TD" not in dict(h.lecturas) for h in resultado.lecturas if dict(h.lecturas).get("L72") == "L72-1")
     for regimen in ("ley_rd", "amlr", "T-4"):
         assert all("TD" not in dict(h.lecturas) for h in r[regimen].lecturas)
+
+
+def test_revision_sin_cambios_posterior_a_a_en_t1_y_t3():
+    # D-33: cliente de 2020, manual de 36 meses, revisión periódica del 2025-01-15 y
+    # otra sin cambios del 2027-12-01. Con AC-2, el AMLR no la cuenta y el RD sí.
+    r = calcular(
+        entrada(
+            "2028-03-01",
+            "2020-01-10",
+            [clasificacion("2020-01-10")],
+            [
+                revision("R1", "inicial", "2020-01-10"),
+                revision("R2", "periodica", "2025-01-15"),
+                revision("R3", "periodica", "2027-12-01", "sin_cambios"),
+            ],
+        )
+    )
+    assert r["ley_rd"].estado == "en_plazo"
+    assert r["ley_rd"].fechas_proxima_revision == (D("2030-12-01"),)
+    for t in ("T-1", "T-3"):
+        resultado = r[t]
+        assert resultado.estado == "indeterminado"
+        assert {a.dimension for a in resultado.atribuciones} == {"AC", "TR"}
+        assert any("D-33" in a for a in resultado.avisos)
+        por_lectura = {}
+        for h in resultado.lecturas:
+            lecturas = dict(h.lecturas)
+            por_lectura.setdefault((lecturas.get("AC"), lecturas.get("TR")), set()).add(
+                (h.periodico.norma, h.periodico.ancla, h.periodico.fecha_limite, h.estado)
+            )
+        assert por_lectura[("AC-2", "TR-1")] == {("RD", D("2025-01-15"), D("2028-01-15"), "vencida")}
+        assert por_lectura[("AC-2", "TR-2")] == {
+            ("AMLR", D("2027-12-01"), D("2032-12-01"), "en_plazo"),
+            ("AMLR", D("2027-12-01"), D("2030-12-01"), "en_plazo"),
+        }
+        # Con AC-1 las dos lecturas coinciden y TR no se consulta.
+        assert (("AC-1", None)) in por_lectura
+        assert all(k[1] is None for k in por_lectura if k[0] == "AC-1")
+    # T-2 y T-4 no tienen periodo del RD que cerrar.
+    for t in ("T-2", "T-4"):
+        assert all("TR" not in dict(h.lecturas) for h in r[t].lecturas)

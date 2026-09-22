@@ -428,21 +428,47 @@ class _Evaluador:
         if regimen == "T-2" or not existente:
             return self._periodo(_AMLR, self._ancla(_AMLR, self.revisiones)), self._eventos("transicion")
 
-        # T-1 y T-3 con un cliente existente.
-        posteriores = [r for r in self.revisiones if r.fecha >= self.A and self._cuenta(r, _AMLR)]
+        # T-1 y T-3 con un cliente existente. D-33: qué norma decide si una revisión
+        # posterior a A cuenta para cerrar el periodo del RD (TR-n).
+        tr1, avisos_tr1 = self._capturando(lambda: self._periodo_t1_t3(regimen, _AMLR))
+        tr2, avisos_tr2 = self._capturando(lambda: self._periodo_t1_t3(regimen, _RD))
+        if tr1 != tr2:
+            self._aviso(
+                "Una revisión posterior a A cuenta con una norma y no con la otra, y cambia el "
+                "periodo en curso: lecturas TR-1 (AMLR) y TR-2 (RD) (D-33)."
+            )
+        datos = [self._dato_revision(r) for r in self.revisiones if r.fecha >= self.A]
+        clave = self.e.elegir_clave("TR", {"TR-1": tr1, "TR-2": tr2}, datos)
+        periodico, avisos = (tr1, avisos_tr1) if clave == "TR-1" else (tr2, avisos_tr2)
+        for a in avisos:
+            self._aviso(a)
+        return periodico, self._eventos("transicion")
+
+    def _periodo_t1_t3(self, regimen, norma_posteriores):
+        """Periodo de T-1 o T-3 de un cliente existente. Las revisiones con fecha ≥ A
+        cuentan según `norma_posteriores` para cerrar el periodo del RD (D-33)."""
+        posteriores = [r for r in self.revisiones if r.fecha >= self.A and self._cuenta(r, norma_posteriores)]
         if posteriores:
             # D-27: desde la primera revisión que cuenta con fecha ≥ A, AMLR con ella de ancla.
             primera = min(r.fecha for r in posteriores)
             desde = [r for r in self.revisiones if r.fecha >= primera]
-            periodico = self._periodo(_AMLR, self._ancla(_AMLR, desde, base=primera))
-        else:
-            # El periodo en curso el día A, con el RD.
-            anteriores = [r for r in self.revisiones if r.fecha < self.A]
-            periodico = self._periodo(_RD, self._ancla(_RD, anteriores))
-            if regimen == "T-3":
-                # D-26: A + P, sin superar el vencimiento del RD.
-                periodico = self._mas_temprano(periodico, self._periodo(_AMLR, self.A))
-        return periodico, self._eventos("transicion")
+            return self._periodo(_AMLR, self._ancla(_AMLR, desde, base=primera))
+        # El periodo en curso el día A, con el RD.
+        anteriores = [r for r in self.revisiones if r.fecha < self.A]
+        periodico = self._periodo(_RD, self._ancla(_RD, anteriores))
+        if regimen == "T-3":
+            # D-26: A + P, sin superar el vencimiento del RD.
+            periodico = self._mas_temprano(periodico, self._periodo(_AMLR, self.A))
+        return periodico
+
+    def _capturando(self, funcion):
+        """(resultado, avisos nuevos), sin dejar los avisos anotados: solo se anotan
+        los de la opción que rige."""
+        previos = len(self.avisos)
+        resultado = funcion()
+        nuevos = self.avisos[previos:]
+        del self.avisos[previos:]
+        return resultado, nuevos
 
     @staticmethod
     def _mas_temprano(a: Periodico, b: Periodico) -> Periodico:

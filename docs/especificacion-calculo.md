@@ -123,6 +123,7 @@ Las dimensiones de lectura son estas:
 | Transición (S-2) | T-1 a T-4 | transición | §5 |
 | Evento que ninguna norma activa en su periodo, en T-1 a T-3 | TE-1, TE-2, TE-3 | transición | §5.2 |
 | Evento que las dos normas activan en su periodo, en T-1 a T-3 | TD-1, TD-2 | transición | §5.2 |
+| Norma que decide si una revisión posterior a A cierra el periodo del RD, en T-1 y T-3 | TR-1, TR-2 | transición | §5.2 |
 
 ---
 
@@ -339,6 +340,25 @@ Notas:
   - **TD-2. El AMLR.** Desde A rige el AMLR, y el AMLR fija la activación en la fecha del conocimiento, que es posterior a A.
 
   La versión anterior del cálculo aplicaba TD-1 sin decirlo, porque comprobaba primero el RD.
+- **[D-33] Qué norma decide si una revisión posterior a A cierra el periodo del RD.** En T-1 y T-3, un cliente existente pasa al AMLR con «la primera revisión que cuenta con fecha ≥ A» ([D-27]). Mientras no la hay, sigue el periodo del RD calculado con las revisiones anteriores a A. Pero D-27 no dice con qué norma se decide si una revisión posterior a A «cuenta», y las dos normas no cuentan las mismas (§2.3). La diferencia aparece con una revisión `sin_cambios` posterior a A y la lectura AC-2: el AMLR no la cuenta, y el RD sí.
+
+  Hay dos lecturas. El resultado lleva además un aviso cuando dan periodos distintos:
+  - **TR-1. El AMLR.** La revisión es posterior a A, y desde A rige el AMLR. Con AC-2, la revisión no cuenta para nadie: no abre el periodo del AMLR, y el periodo del RD solo tiene en cuenta las revisiones anteriores a A.
+  - **TR-2. El RD, mientras dura su periodo.** La revisión cierra el periodo en curso, que es del RD, y por eso la juzga el RD. Desde ella rige el AMLR, con ella como ancla ([D-27]).
+
+  Con AC-1, o sin revisiones `sin_cambios` posteriores a A, las dos lecturas coinciden y no se consultan. La versión anterior del cálculo aplicaba TR-1 sin decirlo.
+
+  Ejemplo:
+  - Cliente desde 2020, manual con 36 meses para su nivel.
+  - Revisión periódica del 2025-01-15 y otra `sin_cambios` del 2027-12-01.
+  - R = 2028-03-01.
+
+  | Régimen y lecturas | Periodo | Estado |
+  |---|---|---|
+  | `ley_rd` | Desde la revisión de 2027: vence el 2030-12-01 | `en_plazo` |
+  | T-1 con AC-1 | AMLR desde la revisión de 2027: vence el 2032-12-01 (PM-1) o el 2030-12-01 (PM-2) | `en_plazo` |
+  | T-1 con AC-2 y TR-1 | RD desde la revisión de 2025: vence el 2028-01-15 | `vencida` |
+  | T-1 con AC-2 y TR-2 | AMLR desde la revisión de 2027: vence el 2032-12-01 (PM-1) o el 2030-12-01 (PM-2) | `en_plazo` |
 - **[D-28]** La salida compara T-1 a T-4 y dice expresamente si no coinciden: el estado del cliente en R depende entonces de cómo se resuelva S-2. También dice si `ley_rd` y `amlr` no coinciden.
 
 ---
@@ -693,3 +713,4 @@ Lleva la misma advertencia que en `plazos-conservacion-pbc`: es un cálculo bajo
 | D-30 | Una dimensión causa el `indeterminado` si, en alguna combinación de las demás, cambiar solo esa cambia el estado; sin combinación de referencia. Se dan sus lecturas con sus estados y los datos que la ponen en juego. | §1.5 |
 | D-31 | En T-1 a T-3, un evento que el RD activa en A o después y el AMLR antes de A (o nunca) no se descarta: lecturas TE-1 (RD), TE-2 (AMLR desde A) y TE-3 (ninguna), con aviso. | §5.2 |
 | D-32 | En T-1 a T-3, un evento que el RD activa antes de A y el AMLR en A o después no se resuelve a favor del RD: lecturas TD-1 (RD) y TD-2 (AMLR), con aviso. | §5.2 |
+| D-33 | En T-1 y T-3, si una revisión posterior a A cierra el periodo del RD lo decide el AMLR (TR-1) o el RD (TR-2); con aviso si difieren. | §5.2 |
