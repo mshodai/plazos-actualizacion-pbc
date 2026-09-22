@@ -699,12 +699,29 @@ class _Evaluador:
             return min(activaciones) if activaciones else None
         # D-25, T-1 a T-3: la norma aplicable en la fecha de activación. Primero el RD,
         # si puede activarse antes de A; si no, el AMLR, si se activa en A o después.
+        rd = None
         if min(ev.fecha_hecho, ev.fecha_conocimiento) < self.A:
             rd = self._activacion_rd(ev)
             if rd and rd[0] < self.A:
                 return rd
         amlr = self._activacion_amlr(ev)
-        return amlr if amlr and amlr[0] >= self.A else None
+        if amlr and amlr[0] >= self.A:
+            return amlr
+        if rd is None:
+            # Antes de A y sin supuesto en el RD: no obliga (D-25).
+            return None
+        # D-31: el RD lo activa en A o después y el AMLR antes de A (o no lo activa).
+        # Ninguna norma lo activa en su periodo: lecturas TE-n, sin descartarlo en silencio.
+        self._aviso(
+            f"El evento {ev.id} se activa con el RD el {rd[0]} (en A o después) y con el AMLR "
+            f"{'el ' + str(amlr[0]) + ' (antes de A)' if amlr else 'en ninguna fecha'}: lecturas TE-1 a TE-3 (D-31)."
+        )
+        opciones = {
+            "TE-1": rd,
+            "TE-2": (self.A, f"{amlr[1]}, desde A") if amlr else None,
+            "TE-3": None,
+        }
+        return self.e.elegir("TE", opciones, [self._dato_evento(ev)])
 
     def _eventos(self, modo):
         pendientes = []

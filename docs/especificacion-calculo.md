@@ -121,6 +121,7 @@ Las dimensiones de lectura son estas:
 | Información de riesgo u `otro` como «cambio de circunstancias» en la Ley 7.2 (S-9) | LC-1, LC-2 | Ley y RD | §6.2 |
 | Letra del art. 26.3 en los eventos sin supuesto claro (S-9) | EV-A, EV-C, EV-N | AMLR | §6.3 |
 | Transición (S-2) | T-1 a T-4 | transición | §5 |
+| Evento que ninguna norma activa en su periodo, en T-1 a T-3 | TE-1, TE-2, TE-3 | transición | §5.2 |
 
 ---
 
@@ -318,6 +319,16 @@ Notas:
 - **[D-27] T-1 y T-3, después de la primera revisión posterior a A**, calculan como `amlr` con esa revisión como ancla. Las lecturas de §2 y §4 se aplican dentro de cada T-n: una T-n puede ser `indeterminado` por sí misma.
 - **T-4** no es solo transitoria: afecta también a los clientes nuevos. Se incluye aquí porque es la que más cambia el resultado desde A. Es la más exigente por construcción.
 - **[D-25] Eventos en la transición.** Con T-1, T-2 y T-3, cada evento se juzga con la norma aplicable en su fecha de activación: el RD si la activación es anterior a A y el AMLR si es posterior o igual. Con T-4, con las dos: el evento obliga si lo activa cualquiera de ellas, y se toma la activación más temprana ([D-21]). La alternativa, aplicar el art. 26.3 del AMLR desde A a eventos anteriores no atendidos, daría a un cambio de titularidad de 2026 que el RD no cubría una revisión exigible desde A. Se descartó porque el art. 26.3 activa la revisión cuando el cambio «se produzca», no después.
+- **[D-31] Evento que ninguna norma activa en su propio periodo.** Con T-1, T-2 y T-3, la regla de D-25 no se cumple para ninguna norma cuando se dan a la vez dos cosas: el RD activa el evento en A o después, y el AMLR lo activa antes de A o no lo activa. El RD ya no se aplica en esa fecha, y el AMLR todavía no se aplicaba en la suya.
+
+  Ocurre con un cambio de actividad cuyo hecho es anterior a A y cuyo conocimiento es posterior, en la combinación FV-2 y L72-1. El RD 33.1.b se activa entonces en la fecha de conocimiento, porque «se verifique» se lee como «se comprueba», y la Ley 7.2 no se aplica. En cambio, la letra a) del AMLR se activa en la fecha del hecho. En los demás tipos, las dos normas usan la misma fecha o el RD la más temprana.
+
+  Ningún texto dice qué pasa entonces. Hay tres lecturas, y el resultado lleva además un aviso:
+  - **TE-1. El RD, en su fecha.** El hecho ocurrió con el RD, y el RD solo lo activa al conocerse.
+  - **TE-2. El AMLR, desde A.** El AMLR se aplica al evento, pero no puede crear una obligación antes de ser aplicable (art. 90), así que la activación es A. Si el AMLR no activa el evento, esta lectura no lo activa.
+  - **TE-3. Ninguna.** Es la lectura literal de D-25: ninguna norma lo activa dentro de su periodo.
+
+  La versión anterior del cálculo aplicaba TE-3 sin decirlo: el evento desaparecía de la lectura sin ningún aviso.
 - **[D-28]** La salida compara T-1 a T-4 y dice expresamente si no coinciden: el estado del cliente en R depende entonces de cómo se resuelva S-2. También dice si `ley_rd` y `amlr` no coinciden.
 
 ---
@@ -670,3 +681,4 @@ Lleva la misma advertencia que en `plazos-conservacion-pbc`: es un cálculo bajo
 | D-28 | La salida señala si T-1 a T-4 no coinciden y si `ley_rd` y `amlr` no coinciden. | §5.2 |
 | D-29 | La próxima revisión obligatoria es la fecha límite sin cumplir más temprana; los eventos sin plazo van aparte. | §1.4 |
 | D-30 | Una dimensión causa el `indeterminado` si, en alguna combinación de las demás, cambiar solo esa cambia el estado; sin combinación de referencia. Se dan sus lecturas con sus estados y los datos que la ponen en juego. | §1.5 |
+| D-31 | En T-1 a T-3, un evento que el RD activa en A o después y el AMLR antes de A (o nunca) no se descarta: lecturas TE-1 (RD), TE-2 (AMLR desde A) y TE-3 (ninguna), con aviso. | §5.2 |
