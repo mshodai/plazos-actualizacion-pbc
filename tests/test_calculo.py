@@ -410,3 +410,20 @@ def test_empate_de_bases_de_un_evento():
     assert bases("ley_rd", FV="FV-2", L72="L72-2") == (("Ley 7.2",), D("2028-05-01"))
     assert bases("T-4", FV="FV-1", L72="L72-2") == (("RD 33.1.b", "Ley 7.2", "AMLR 26.3.a"), D("2028-05-01"))
     assert bases("T-4", FV="FV-2", L72="L72-1") == (("AMLR 26.3.a",), D("2028-05-01"))
+
+
+def test_relacion_terminada_sin_componentes():
+    # D-22: sin próxima revisión no hay componente periódico: tupla vacía, no None.
+    r = calcular(
+        entrada(
+            "2026-01-01",
+            "2019-01-10",
+            [clasificacion("2019-01-10")],
+            [revision("R1", "inicial", "2019-01-10")],
+            terminacion="2025-06-01",
+        )
+    )
+    for regimen in r.regimenes:
+        for h in regimen.lecturas:
+            assert h.periodicos == ()
+            assert h.eventos == ()

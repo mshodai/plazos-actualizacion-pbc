@@ -163,7 +163,8 @@ class Lectura:
     lecturas: tuple[tuple[str, str], ...]
     estado: str
     fecha_proxima_revision: date | None
-    # Uno, o varios si empatan en la fecha límite (D-34). Nunca vacío.
+    # Uno, o varios si empatan en la fecha límite (D-34). Vacío solo con
+    # `relacion_terminada`, que no tiene próxima revisión (D-22).
     periodicos: tuple[Periodico, ...]
     eventos: tuple[EventoPendiente, ...]
     avisos: tuple[str, ...]
@@ -240,7 +241,7 @@ def calcular_regimen(entrada: Entrada, regimen: str) -> ResultadoRegimen:
     avisos = []
     for h in hojas:
         avisos.extend(a for a in h.avisos if a not in avisos)
-    atribuciones = _atribuir(hojas, datos) if estado == INDETERMINADO else ()
+    atribuciones = atribuir(hojas, datos) if estado == INDETERMINADO else ()
     return ResultadoRegimen(regimen, estado, tuple(fechas), tuple(hojas), atribuciones, tuple(avisos))
 
 
@@ -319,7 +320,7 @@ def _explorar(funcion, datos):
     return hojas
 
 
-def _atribuir(hojas, datos):
+def atribuir(hojas, datos):
     """D-30: una dimensión causa el `indeterminado` si, en alguna combinación de
     las demás, cambiar solo esa cambia el estado.
 
@@ -416,7 +417,7 @@ class _Evaluador:
             avisos = [f"La relación terminó el {terminacion}: no hay próxima revisión (D-22)."]
             if previo.estado == VENCIDA:
                 avisos.append(f"En la fecha de terminación había una revisión vencida desde {previo.fecha_proxima_revision}.")
-            return _Resultado(RELACION_TERMINADA, None, None, (), tuple(avisos))
+            return _Resultado(RELACION_TERMINADA, None, (), (), tuple(avisos))
         return self._evaluar_viva(regimen)
 
     def _evaluar_viva(self, regimen) -> _Resultado:
