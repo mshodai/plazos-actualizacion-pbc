@@ -209,6 +209,7 @@ El borrador de la AMLA se usa para construir lecturas del AMLR donde el texto no
 - [validador-cadena-verifactu](https://github.com/mshodai/validador-cadena-verifactu): comprueba la integridad de una cadena de registros de facturación de Verifactu.
 - [calculo-titularidad-real](https://github.com/mshodai/calculo-titularidad-real): calcula la titularidad real bajo la Ley 10/2010 y el AMLR.
 - [plazos-conservacion-pbc](https://github.com/mshodai/plazos-conservacion-pbc): calcula el estado de conservación de la documentación bajo la Ley 10/2010 y el AMLR.
+- [registro-examen-especial-pbc](https://github.com/mshodai/registro-examen-especial-pbc): comprueba si el registro de un examen especial en el que pudo intervenir un sistema de IA está completo bajo la Ley 10/2010 y bajo el AMLR.
 
 ## Licencia
 
